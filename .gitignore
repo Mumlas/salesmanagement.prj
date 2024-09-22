@@ -1,0 +1,10 @@
+# ignore log files, text files, db files
+*.log
+*.txt
+*.docx
+*.doc
+*.db
+*.pgpass
+
+#ignore all files inside temp folder
+temp/
