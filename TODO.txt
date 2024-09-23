@@ -7,7 +7,7 @@ I. Requirement:
 	
 II. Prep
 	1. check python is installed
-	2. check virtual environment is installed
+	2. check virtual environment management tool is installed
 	3. check PostgreSQL is installed
 	4. create Git repo
 
@@ -19,7 +19,7 @@ III. Designing Database
 
 III. Setting up virtual environment
 	1. create a virtual environment
-	2. install all the require python packages for the project
+	2. install all the require python packages for the project :Django, psycopg2
 	3. test to ensure the packages are installed properly
 
 IV. Create the project
@@ -29,5 +29,16 @@ IV. Create the project
 	4. test to ensure the project is created and working properly 
 
 V. Configure the database
-	1. link the database with the project just created
+	1. link the database with the project just created using the following settings:
+		DATABASES = {
+				'default':{
+						'ENGINE':'django.db.backends.postgresql',
+						'NAME': 'saleDB',
+						'USER':'postgres'
+						'PASSWORD':'postres'
+						'HOST':'localhost',
+						'PORT':5432,
+					}
+				}
+	
 	2. 
