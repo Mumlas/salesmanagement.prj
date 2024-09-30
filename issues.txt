@@ -1,4 +1,0 @@
-1. installing psycopg2
-	ERROR: Failed building wheel for psycopg2
-	RESOLUTION: sudo apt-get install libpq-dev then pip install psycopg2
-
