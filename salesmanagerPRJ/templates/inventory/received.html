@@ -1,0 +1,94 @@
+{% extends "base_auth.html" %} 
+
+{% load static %}
+
+
+{% block content%}
+
+<div class="row">
+
+  <div class="col-md-4"></div>
+
+  <div class="col-md-4">
+        <div class="card mt-5">
+
+            <div class="card-body">
+
+                <div class="card-title py-2">
+                    <h4>Received Supply</h4>
+                </div> 
+
+                <form action="{% url 'register_cls' %}" method="post"> 
+                    
+                    {% csrf_token %}
+                    
+                    {% include "partial/_messages.html" %} 
+
+                    <div class="form-group">
+                        <input
+                        type="date"
+                        name="datesupply"
+                        id="datesupplyField"
+                        class="form-control form-control-md"
+                        placeholder="Date Supply"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <input
+                        type="text"
+                        name="receivedBy"
+                        id="receivedByField"
+                        class="form-control form-control-md"
+                        placeholder="Staff who recieved the product"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <input
+                        type="text"
+                        name="productID"
+                        id="productIDField"
+                        class="form-control form-control-md"
+                        placeholder="Select Product"
+                        />
+                    </div> 
+
+                    <div class="form-group">
+                        <input
+                        type="text"
+                        name="receivedFrom"
+                        id="receivedFromField"
+                        class="form-control form-control-md"
+                        placeholder="Driver who supply the product"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <input
+                        type="Number"
+                        name="quantitySupply"
+                        id="quantitySupplyField"
+                        class="form-control form-control-md"
+                        placeholder="Quantity Supplied (9999.99)"
+                        />
+                    </div>
+                    
+
+                    <input type='submit' value="Update Inventory" class="btn btn-block btn-primary py-3 submit-btn" />
+                </form> <!-- close form-->
+            </div>
+        </div><!-- close card-->
+    </div>
+
+    <div class="col-md-4">
+
+    </div>
+  
+</div>
+
+<script src="{% static 'js/register.js' %}">
+
+</script>
+
+{% endblock %}

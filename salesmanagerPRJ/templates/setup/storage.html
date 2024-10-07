@@ -1,0 +1,75 @@
+{% extends "base_auth.html" %} 
+
+{% load static %}
+
+
+{% block content%}
+
+<div class="row">
+
+  <div class="col-md-4"></div>
+
+  <div class="col-md-4">
+        <div class="card mt-5">
+
+            <div class="card-body">
+
+                <div class="card-title py-2">
+                    <h4>Product Storage Tank</h4>
+                </div> 
+
+                <form action="{% url 'storage' %}" method="POST"> 
+                    
+                    {% csrf_token %}
+                    
+                    {% include "partial/_messages.html" %} 
+
+                    <div class="form-group">
+                        <label for = "Storage">Name of Storage  </label>
+                        <input
+                        type="text"
+                        name="storage"
+                        id="StorageField"
+                        class="form-control form-control-md"
+                        placeholder="Enter Storage Description"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for = "branchID">Branch Name</label>
+                        <select class = "form-control form-control-md" name="branch" id="branchIDField">
+                            <option value="" disabled selected> Select Branch</option>
+                            {% for branch in branches %}
+                                <option name = "branch" value="{{ branch.id }}">{{ branch.branchName}} - {{ branch.branchAddress}} </option>
+                            {% endfor %}
+                        </select><br>
+                    </div>                                      
+
+                    <div class="form-group">
+                        <label for = "quantity">Capacity of Storage Facility </label>
+                        <input
+                        type="Number"
+                        name="quantity"
+                        id="quantityField"
+                        class="form-control form-control-md"
+                        placeholder="0.00"
+                        />
+                    </div>  
+
+                    <input type='submit' value="Submit" class="btn btn-block btn-primary py-3 submit-btn orm-control form-control-md" />
+                </form> <!-- close form-->
+            </div>
+        </div><!-- close card-->
+    </div>
+
+    <div class="col-md-4">
+
+    </div>
+  
+</div>
+
+<script src="{% static 'js/register.js' %}">
+
+</script>
+
+{% endblock %}

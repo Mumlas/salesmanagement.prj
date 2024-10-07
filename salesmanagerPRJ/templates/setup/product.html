@@ -1,0 +1,86 @@
+{% extends "base_auth.html" %} 
+
+{% load static %}
+
+
+{% block content%}
+
+<div class="row">
+
+  <div class="col-md-4"></div>
+
+  <div class="col-md-4">
+        <div class="card mt-5">
+
+            <div class="card-body">
+
+                <div class="card-title py-2">
+                    <h4>Update Product Inventory</h4>
+                </div> 
+
+                <form action="{% url 'product' %}" method="post"> 
+                    
+                    {% csrf_token %}
+                    
+                    {% include "partial/_messages.html" %} 
+
+                    <div class="form-group">
+                        <label for = "product">Available Products</label>
+                        <select class = "form-control form-control-md" name="product" id="productIDField">
+                            <option value="" disabled selected> Select Product</option>
+                            <option name = "product" value="PMS"> PMS</option>
+                            <option name = "product" value="Disiel"> Disiel</option>
+                            <option name = "product" value="Kerosene"> Kerosene</option>
+                            <option name = "product" value="Engine Oil"> Enginee Oil</option>
+                            <option name = "product" value="Aviation Fuel"> Aviation Fuel</option>
+                        </select><br>
+                    </div>                                     
+
+                    <div class="form-group">
+                        <label for = "facilityid">Storage Facility</label>
+                        <select class = "form-control form-control-md" name="facility" id="facilityIDField">
+                            <option value="" disabled selected> Select Storage Facility</option>
+                            {% for facility in facilities %}
+                                <option name = "facility" value="{{ facility.id }}">{{facility.id}} - {{ facility.storageDesc}}</option>
+                            {% endfor %}
+                        </select><br>
+                    </div>
+
+                    <div class="form-group">
+                        <label for = "quanitySupplied">Quanity Supplied</label>
+                        <input
+                        type="number"
+                        name="quanitySupplied"
+                        id="quantityField"
+                        class="form-control form-control-md"
+                        placeholder="Enter quanityt of product supplied"
+                        /><br>
+                    </div>
+
+                    <div class="form-group">
+                        <label for = "dateSupplied">Date Supplied</label>
+                        <input
+                        type="date"
+                        name="dateSupplied"
+                        id="pumpDescriptionField"
+                        class="form-control form-control-md"
+                        /><br>
+                    </div>
+
+                    <input type='submit' value="Update Inventory" class="btn btn-block btn-primary py-3 submit-btn" />
+                </form> <!-- close form-->
+            </div>
+        </div><!-- close card-->
+    </div>
+
+    <div class="col-md-4">
+
+    </div>
+  
+</div>
+
+<script src="{% static 'js/register.js' %}">
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base_auth.html" %} 
+
+{% load static %}
+
+
+{% block content%}
+
+<div class="row">
+
+  <div class="col-md-4"></div>
+
+  <div class="col-md-4">
+        <div class="card mt-5">
+
+            <div class="card-body">
+
+                <div class="card-title py-2">
+                    <h4>Add New Branch</h4>
+                </div> 
+
+                <form action="{% url 'branch' %}" method="POST"> 
+                    
+                    {% csrf_token %}
+                    
+                    {% include "partial/_messages.html" %} 
+{% comment %} 
+                    <div class="form-group">
+                        <input
+                        type="text"
+                        name="branchID"
+                        id="branchIDField"
+                        class="form-control form-control-md"
+                        placeholder="Enter Branch ID"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <input
+                        type="text"
+                        name="branchManager"
+                        id="branchManagerField"
+                        class="form-control form-control-md"
+                        placeholder="Select Branch Manager"
+                        />
+                    </div>
+ {% endcomment %}
+                    <div class="form-group">
+                        <label for = "branchName">Branch Name </label>
+                        <input
+                        type="text"
+                        name="branchName"
+                        id="branchAddressField"
+                        class="form-control form-control-md"
+                        placeholder="Enter Branch Address"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for = "branchAddress">Brach Address  </label>
+                        <input
+                        type="text"
+                        name="branchAddress"
+                        id="branchNameField"
+                        class="form-control form-control-md"
+                        placeholder="Enter Branch Description"
+                        />
+                    </div>                                         
+                    
+                    <input type='submit' value="Add Branch" class="btn btn-block btn-primary py-3 submit-btn" />
+                </form> <!-- close form-->
+            </div>
+        </div><!-- close card-->
+    </div>
+
+    <div class="col-md-4">
+
+    </div>
+  
+</div>
+
+<script src="{% static 'js/register.js' %}">
+
+</script>
+
+{% endblock %}
