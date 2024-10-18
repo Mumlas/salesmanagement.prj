@@ -1,0 +1,100 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.card-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: chocolate;
+}
+
+#staff {
+    width: 600px;
+    padding: 20px;
+    margin: 10px 20px;
+    text-transform: uppercase;
+    background-color: #fff;
+}
+
+.card-title {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin: 10px 0;
+    position: relative;
+}
+
+.form-group label {
+    display: inline-block;
+    margin-bottom: 2px;
+}
+
+.form-group input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+}
+
+.form-group select {
+    display: block;
+    width: 100%;
+    padding: 15px;
+}
+
+.form-group i {
+    position: absolute;
+    right: 10px;
+    top: 35px;
+    visibility: hidden;
+}
+
+.form-group p {
+    color: red;
+    font-size: 15px;
+    visibility: hidden;
+}
+
+.error input {
+    border: 3px red solid;
+}
+
+.success input {
+    border: 3px green solid;
+}
+
+.error select {
+    border: 3px red solid;
+}
+
+.success select {
+    border: 3px green solid;
+}
+
+.success i.fa-check-circle {
+    visibility: visible;
+    color: green;
+}
+
+.success i.fa-exclamation-circle {
+    visibility: visible;
+    color: red;
+}
+
+.error p {
+    visibility: visible;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    background-color: chocolate;
+    color: #fff;
+    text-transform: uppercase;
+    border:none;
+}

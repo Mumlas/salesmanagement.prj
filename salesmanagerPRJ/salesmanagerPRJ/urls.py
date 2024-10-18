@@ -21,5 +21,6 @@ urlpatterns = [
     path('', include('sales.urls')), # rout to sales urls
     path('validation/', include('validation.urls')),
     path('admin/', admin.site.urls),
-    path('setup/', include('setup.urls'))
+    path('setup/', include('setup.urls')),
+    path('inventory/', include('inventory.urls')),
 ]

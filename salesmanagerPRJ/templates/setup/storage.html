@@ -43,7 +43,17 @@
                                 <option name = "branch" value="{{ branch.id }}">{{ branch.branchName}} - {{ branch.branchAddress}} </option>
                             {% endfor %}
                         </select><br>
+
                     </div>                                      
+                    <div class="form-group">
+                        <label for = "productID">Select Product</label>
+                        <select class = "form-control form-control-md" name="product" id="branchIDField">
+                            <option value="" disabled selected> Select Product</option>
+                            {% for product in products %}
+                                <option name = "product" value="{{ product.id }}">{{ product.productName}} </option>
+                            {% endfor %}
+                        </select><br>
+                    </div> 
 
                     <div class="form-group">
                         <label for = "quantity">Capacity of Storage Facility </label>

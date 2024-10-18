@@ -11,29 +11,28 @@ class Branch(models.Model):
 
     def __str__(self):
         return(self.branchName)
-    
-class Storage(models.Model):
-    storageDesc = models.CharField(max_length=100)
-    quantity = models.DecimalField(max_digits=10, decimal_places=2)
-    branch = models.ForeignKey(Branch,related_name='storage_branch', on_delete=models.CASCADE)
 
-    class Meta:
-        verbose_name_plural="Storage"
-
-    def __str__(self):
-        return(self.storageDesc)
-    
 class Product(models.Model):
-    type = models.CharField(max_length=100, unique=True)
-    storage = models.ForeignKey(Storage, related_name='product_storage', on_delete=models.CASCADE)
-    quantity = models.DecimalField(max_digits=10, decimal_places=2, null=False, unique=False, default=0)
-    date_updated = models.DateField(default=date.today)
+    productName = models.CharField(max_length=100, unique=True)
+    productDescription = models.CharField(max_length=200, null=True, default="None")
 
     class Meta:
         verbose_name_plural="Products"
 
     def __str__(self):
-        return(self.type)
+        return(self.productName)
+        
+class Storage(models.Model):
+    storageDesc = models.CharField(max_length=100)
+    capacity = models.DecimalField(max_digits=10, decimal_places=2)
+    branch = models.ForeignKey(Branch,related_name='storage_branch', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name="storage_product", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural="Storage"
+
+    def __str__(self):
+        return(self.storageDesc+" "+ str(self.capacity)+" "+ str(self.branch))
     
 class Pump(models.Model):
     pupmDesc = models.CharField(max_length=100)
@@ -61,7 +60,7 @@ class Staff(models.Model):
         verbose_name_plural="Staff"
 
     def __str__(self):
-        return(self.firstname, +" "+ self.surname)
+        return(self.firstname +" "+ self.surname)
     
 class Shift(models.Model):
     type = models.CharField(max_length=20, unique=True, null=False)

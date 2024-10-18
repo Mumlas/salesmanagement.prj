@@ -14,18 +14,38 @@
 
             <div class="card-body">
 
-                <div class="card-title py-2">
-                    <h4>Profile a User</h4>
-                </div> 
-
-                <form action="{% url 'register_cls' %}" method="post"> 
-                    
+                <form action="" method="get" name = "staff" id="staff"> 
+                    <div class="card-title">
+                        <h2>Profile a User</h2>
+                    </div> 
                     {% csrf_token %}
                     
                     {% include "partial/_messages.html" %} 
 
                     <div class="form-group">
-                        <label for "">Enter First Name </label>
+                        {% comment %} <label for="username">Name</label>
+                        <input type="text" id="username" placeholder="Name" name="usernam">
+                        <i class ="fas fa-check-circle"></i>
+                        <i class ="fas fa-exclamation-circle"></i>
+                        <p>error message<p>
+                        </div> {% endcomment %}
+                        <label for ='titleField'>Title</label>
+                        <select class = "form-control form-control-md" name="title" id="titleField">
+                            <option value = "" disabled selected>Select title</option>
+                            <option name = "title" value=="title">Alh.</option>
+                            <option name = "title" value=="title">Haj.</option>
+                            <option name = "title" value=="title">Mal</option>
+                            <option name = "title" value=="title">Mr</option>
+                            <option name = "title" value=="title">Mrs</option>
+                            <option name = "title" value=="title">Miss</option>
+                        </select>
+                        <i class="fa-solid fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <p>error message<p>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for ='fnameField'>First Name</label>
                         <input
                         type="text"
                         name="fname"
@@ -33,10 +53,13 @@
                         class="form-control form-control-md"
                         placeholder="First Name"
                         />
+                        <i class="fa-solid fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <p>error message<p>
                     </div>
 
                     <div class="form-group">
-                        <label for "">Enter Surname </label>
+                        <label for ='snameField'>Surname</label>
                         <input
                         type="text"
                         name="sname"
@@ -44,28 +67,37 @@
                         class="form-control form-control-md"
                         placeholder="Surname"
                         />
+                        <i class="fa-solid fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <p>error message<p>
                     </div>
 
                     <div class="form-group">
-                        <label for "">Enter Phone Number </label>
+                        <label for ='phoneField'>Phone Number</label>
                         <input
                         type="text"
                         name="phone"
-                        id="phneField"
+                        id="phoneField"
                         class="form-control form-control-md"
-                        placeholder="Phone Number"
+                        placeholder="Phone Number (999-9999-999)"
                         />
+                        <i class="fa-solid fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <p>error message<p>
                     </div>
 
                     <div class="form-group">
-                        <label for "">Enter Email </label>
+                        <label for ='emailField'>Email</label>
                         <input
-                        type="email"
+                        type="text"
                         name="email"
                         id="emailField"
                         class="form-control form-control-md"
                         placeholder="Email"
                         />
+                        <i class="fa-solid fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <p>error message<p>
                     </div>
 
                     <div class="emailFeedBackArea" styele="display:none">
@@ -74,48 +106,66 @@
                     </div>
 
                     <div class="form-group">
-                        <label for "">Select Designation </label>
-                        <input
-                        type="text"
-                        name="designation"
-                        id="designationField"
-                        class="form-control form-control-md"
-                        placeholder="Designation"
-                        />
+                        <label for ='designationField'>Select Designation</label>
+                        <select class = "form-control form-control-md" name="designation" id="designationField">
+                                <option value="" disabled selected> Select Position</option>
+                                <option name = "designation" value="designation"> MD/CEO</option>
+                                <option name = "designation" value="designation"> Manager</option>
+                                <option name = "designation" value="designation"> Cashier/Accountant</option>
+                                <option name = "designation" value="designation"> Pump Attendant</option>
+                                <option name = "designation" value="designation"> Supervisor</option>
+                                <option name = "designation" value="designation"> Driver</option>
+                                <option name = "designation" value="designation"> Security</option>
+                        </select>
+                        <i class="fa-solid fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <p>error message<p>
                     </div>
 
                     <div class="form-group">
-                        <label for "">Select Branch </label>
-                        <input
-                        type="text"
-                        name="branch"
-                        id="branchField"
-                        class="form-control form-control-md"
-                        placeholder="Branch"
-                        />
+                        <label for ='branchIDField'>Select Branch</label>
+                        <select class = "form-control form-control-md" name="branch" id="branchIDField">
+                            <option value="" disabled selected> Select Branch</option>
+                            {% for branch in branches %}
+                                <option name = "branch" value="{{ branch.id }}"> {{ branch.branchName}}</option>
+                            {% endfor %}
+                        </select>
+                        <i class="fa-solid fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <p>error message<p>
                     </div>
 
                     <div class="form-group">
-                        <label for "">Date of Birth </label> 
+                        <label for ='dobField'>Select date of birth</label>
                         <input
-                        type="date"
+                        type="text"
                         name="dateofbirth"
                         id="dobField"
                         class="form-control form-control-md"
+                        placeholder="Date of Birth (mm/dd/yy)"
+                        onfocus = "(this.type='date')"
                         />
-                    </div>                    
+                        <i class="fa-solid fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <p>error message<p>
+                    </div>                 
                     
                     <div class="form-group">
-                        <label for "">Date of Employment </label>
+                        <label for ='emplymentdateField'>Select Employment Date</label>
                         <input
-                        type="date"
+                        type="text"
                         name="employmentdate"
                         id="emplymentdateField"
                         class="form-control form-control-md"
+                        placeholder="Date of Employment (mm/dd/yy)"
+                        onfocus = "(this.type='date')"
                         />
+                        <i class="fa-solid fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <p>error message<p>
                     </div>
 
-                    <input type='submit' value="Add User" class="btn btn-block btn-primary py-3 submit-btn" />
+                    <input type='submit' value="Add User" class="btn btn-block btn-primary btn-primary-lg py-3 submit-btn" />
                 </form> <!-- close form-->
             </div>
         </div><!-- close card-->
@@ -127,8 +177,13 @@
   
 </div>
 
-<script src="{% static 'js/register.js' %}">
+<script src="{% static 'js/validation.js' %}">
 
 </script>
 
 {% endblock %}
+
+{% comment %} <i class="fa-regular fa-circle-check"></i> 
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <i class="fa-solid fa-circle-check"></i>
+{% endcomment %}
