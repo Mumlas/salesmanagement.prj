@@ -422,8 +422,9 @@ svg {
 }
 
 table {
-  caption-side: bottom;
   border-collapse: collapse;
+  text-indent: initial;
+  border-spacing: 2px;
 }
 
 caption {
@@ -433,21 +434,43 @@ caption {
   text-align: left;
 }
 
-th {
+thead, th {
   text-align: inherit;
   text-align: -webkit-match-parent;
+  background-color: #333;
+  color: white;
 }
 
-thead,
 tbody,
 tfoot,
 tr,
-td,
-th {
+td {
   border-color: inherit;
   border-style: solid;
   border-width: 0;
+  background-color: #d3b866;
+  color: #000;
 }
+
+th {
+  &:first-of-type { 
+    border-start-start-radius: .5em; 
+  }
+  &:last-of-type { 
+    border-start-end-radius: .5em; 
+  }
+}
+tr {
+  &:last-of-type {
+    & td {
+      &:first-of-type { border-end-start-radius: .5em;
+       }
+      &:last-of-type { border-end-end-radius: .5em;
+      }
+    }
+  }
+}
+
 
 label {
   display: inline-block;
@@ -1987,7 +2010,7 @@ progress {
 }
 
 .table-info {
-  --bs-table-color: #fff;
+  --bs-table-color: #ffffff;
   --bs-table-bg: #268bd2;
   --bs-table-border-color: #51a2db;
   --bs-table-striped-bg: #3191d4;

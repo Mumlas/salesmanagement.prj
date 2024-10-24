@@ -28,6 +28,7 @@ def get_products(request, facility_id):
     
     try:
         inStock = Inventory.objects.values_list('quantity', flat=True).get(product_id=product_id)
+        print(f'Stock from get-products {inStock}')
         facility = Storage.objects.get(id=facility_id)
         if not inStock:
             inStock=0
@@ -60,43 +61,70 @@ def getInventory(request):
     return render(request, "inventory/update.html", context)
 
 # Update inventory
-@csrf_exempt  # You might want to handle CSRF tokens properly in production
+#-@csrf_exempt  # You might want to handle CSRF tokens properly in production
 def update_inventory(request):
+
+    branches = Branch.objects.all()
+    context = {"branches":branches}
+
+    if request.method == "POST":
+        #form_data = inventoryForm()
+
     # select the branch
     # select the product/facility: once the product is selcted from the particular branch, current stock can be retrived via storage faclity
     # get the capacity of the facility and determine the gap
     # fill in the gap using the available supplies -  raise alarm if the supplies will exceed the gap!!!
 
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            print(f"POST Request: {data}")
+        branchid = int(request.POST.get('branch'))
+        branch = Branch.objects.get(id=branchid)
 
-            branch_id = data.get('branch')
-            facility_id = data.get('facility')
-            product_id = data.get('product_name')
-            inStock = data.get('inStock')
-            capacity = data.get('capacity')
-            quantitySupplied =request.POST.get('quantitySupplied')
-            dateUpdated =request.POST.get('dateSupplied')
+        product = request.POST.get('product')
+        facilityid = int(request.POST.get('facility'))
+        facility = Storage.objects.get(id=facilityid)
 
-            # Check if the new quantity + current quantity is within capacity
-            if inStock + quantitySupplied > capacity:
-                return JsonResponse({'error': 'New supply exceeds facility capacity'}, status=400)
+        inStock = float(request.POST.get('quantityinStock'))
 
-            # Update the current quantity in the facility
-            quantity =  inStock + quantitySupplied
-            Inventory.objects.create(branch=branch_id,
-                                     product=product_id,
-                                     storage=facility_id,
-                                     quanityt = quantity,
-                                     updatedBy = 1,
-                                     dateUpdated=dateUpdated)
+        productid = Product.objects.get(productName=product)
+        facilities = Storage.objects.filter(branch_id=branchid)
+        capacity = float(Storage.objects.values_list('capacity', flat=True).get(pk= facilityid))
 
-            messages.success(request, 'Inventory Updated successfully')
-            return JsonResponse({'Current Stock': quantity})
+        print(f'Branch ID : {branchid}') 
+        print(f'product ID : {productid} - {product}')
+        print(f'List of facilities in Branch {branchid}  - {facilities}')
+        print(f'Selected product - {product}')
+        print(f'Selected facility ID: {facilityid}')            
+        print(f'Capacity of facility {facilityid} - {capacity}')
+        print(f'Current stock in {facilityid} is {inStock}')            
+
+
+        quantitySupplied = float(request.POST.get('quanitySupplied'))
+        quantityRequired = capacity - inStock
+
+        print(f'Product: {product}')
+        print(f'Storage Facility: {facilityid}')
+        print(f'Quantity Supplied: {quantitySupplied}')
+        print(f'Quantity Required: {quantityRequired}')
         
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
-       
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+        if quantitySupplied <= quantityRequired:
+            inStock += quantitySupplied
+            print(f'New Stock {inStock}')
+        else:
+            messages.error(request, 'The quantity is more than the capacity of the tank, Adjust the quanity to: '+str(quantityRequired)) 
+            return render(request, "inventory/update.html", context)        
+
+        dateSupplied = request.POST.get('dateSupplied')
+        if not dateSupplied:
+            messages.error(request, 'Select Date the Product was supplied')
+            return render(request, 'inventory/update.html', context) 
+        print(f'Data type of {branchid} is {type(branch)}')
+        Inventory.objects.create(product=productid,
+                                 storage = facility,
+                                 quantity = inStock,
+                                 dateUpdated =dateSupplied,
+                                 updatedBy = user,
+                                 branch = branch
+                                 )
+        messages.success(request, 'Inventory Update successfully')
+        return render(request,'inventory/update.html', context)
+
+    return render(request, "inventory/update.html",{'error': 'Invalid request method'}, status=400)

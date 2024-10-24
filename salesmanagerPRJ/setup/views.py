@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
 from .models import *
+from datetime import date, datetime
 
 
 # Create your views here.
@@ -181,4 +182,115 @@ class StaffView(View):
         return render(request,'setup/staff.html', context)
     
     def post(self, request):
-        pass
+
+        branches = Branch.objects.all()
+        context = {
+            "branches":branches
+        }
+    
+        if request.method=="POST":
+            title = request.POST.get('title')
+            if not title:
+                messages.error(request,'Invalid input, select a valid TITLE')
+                return render(request,'setup/staff.html', context)
+
+            firstname = request.POST.get('fname')
+            if not firstname:
+                messages.error(request,'Invalid FIRST NAME, enter a valid FIRST NAME')
+                return render(request,'setup/staff.html', context)
+            if len(str(firstname)) < 3 | len(str(firstname)) >50:
+                messages.error(request,'FIRST NAME too short or too long, enter FIRST NAME between 3 to 50 characters')
+                return render(request,'setup/staff.html', context)
+            
+            surname = request.POST.get('sname')
+            if not surname:
+                messages.error(request,'Invalid SURNAME, enter a valid SURNAME')
+                return render(request,'setup/staff.html', context)
+            if  len(str(surname)) < 3 | len(str(surname))>50:
+                messages.error(request,'SURNAME too short or too long, enter SURNAME between 3 to 50 characters')
+                return render(request,'setup/staff.html', context)
+            
+            sex = request.POST.get('sex')
+            if not sex:
+                messages.error(request,'Invalid input, select a valid sex')
+                return render(request,'setup/staff.html', context)            
+
+            dateofbirth = request.POST.get('dateofbirth')
+            if not dateofbirth:
+                messages.error(request,'Select a valid date of birth')
+                return render(request,'setup/staff.html', context)
+
+            try:
+                dateofbirth = datetime.strptime(dateofbirth, '%Y-%m-%d').date()
+                print(dateofbirth.year)
+                if date.today().year - dateofbirth.year < 18:
+                    messages.error(request,'Staff can not be younger than 18 years old')
+                    return render(request,'setup/staff.html', context)
+            except ValueError:
+                    messages.error(request,'Not a valid date of birth')
+                    return render(request,'setup/staff.html', context)
+                            
+            employmentdate = request.POST.get('employmentdate')
+
+            if not employmentdate:
+                messages.error(request,'Select a valid date of employment')
+                return render(request,'setup/staff.html', context)
+            
+            try:
+                employmentdate = datetime.strptime(employmentdate, '%Y-%m-%d').date()
+                if  employmentdate > date.today():
+                    messages.error(request,'In consistent date of employment')
+                    return render(request,'setup/staff.html', context)
+            except ValueError:
+                    messages.error(request,'Not a valid date of employment')
+                    return render(request,'setup/staff.html', context)
+                                            
+            designation = request.POST.get('designation')
+            if not designation:
+                messages.error(request,'In valid designation')
+                return render(request,'setup/staff.html', context)
+                            
+            branch = request.POST.get('branch')
+            if not branch:
+                messages.error(request,'Invalid brnach')
+                return render(request,'setup/staff.html', context)
+            branchid = Branch.objects.get(id=branch)
+
+
+            email = request.POST.get('email')
+            if not email:
+                messages.error(request,'In valid email')
+                return render(request,'setup/staff.html', context)
+                            
+            phonenumber = request.POST.get('phone')
+            if not phonenumber:
+                messages.error(request,'Invalid phone number')
+                return render(request,'setup/staff.html', context)
+            if  len(str(phonenumber)) <11 | len(str(phonenumber)):
+                messages.error(request,'phone number must be 11 digits')
+                return render(request,'setup/staff.html', context)
+
+            Staff.objects.create(title=title,
+                                 firstname=firstname,
+                                 surname=surname,
+                                 sex=sex,
+                                 dateofbirth=dateofbirth,
+                                 employmentdate=employmentdate,
+                                 designation=designation,
+                                 branch=branchid,
+                                 email=email,
+                                 phonenumber=phonenumber)
+
+            messages.success(request, 'Staff Added successfully')
+            return render(request,'setup/staff.html', context)
+
+        return render(request, "setup/staff.html",{'error': 'Invalid request method'}, status=400)                    
+
+
+
+
+
+
+
+
+

@@ -5,13 +5,10 @@
         <meta charset='utf-8' />
         <meta name='viewpoint' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
   
-        <title>Dashboard Template · Bootstrap v5.3</title>
-    
-        <link href= "{% static 'style/dashboard.css' %}" rel="stylesheet">
-    
+        <title>{% block title %} {% endblock %}</title>
+        
         <link href= "{% static 'style/bootstrap.css' %}" rel="stylesheet" >
-        <link href= "{% static 'style/bootstrap.min.css' %}" rel="stylesheet" >
-        <link href= "{% static 'style/main.css' %}" rel="stylesheet" >
+
       </head>
       
   <body>
@@ -50,10 +47,7 @@
           {% block content %} {% endblock %}
         </main>
       </div>
-    </div>
-    <script src="/docs/5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js" integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous"></script><script src="dashboard.js"></script>
+    </div>    
   </body>
 </html>
     

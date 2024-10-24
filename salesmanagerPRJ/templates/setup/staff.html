@@ -14,7 +14,7 @@
 
             <div class="card-body">
 
-                <form action="" method="get" name = "staff" id="staff"> 
+                <form action="{% url 'staff' %}" method="POST" name = "staff" id="staff"> 
                     <div class="card-title">
                         <h2>Profile a User</h2>
                     </div> 
@@ -73,6 +73,18 @@
                     </div>
 
                     <div class="form-group">
+                        <label for ='sexField'>Sex</label>
+                        <select class = "form-control form-control-md" name="sex" id="titleField">
+                            <option value = "" disabled selected>Select Sex</option>
+                            <option name = "sex" value=="sex">Female</option>
+                            <option name = "sex" value=="sex">Male</option>
+                        </select>
+                        <i class="fa-solid fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <p>error message<p>
+                    </div>
+
+                    <div class="form-group">
                         <label for ='phoneField'>Phone Number</label>
                         <input
                         type="text"
@@ -109,13 +121,13 @@
                         <label for ='designationField'>Select Designation</label>
                         <select class = "form-control form-control-md" name="designation" id="designationField">
                                 <option value="" disabled selected> Select Position</option>
-                                <option name = "designation" value="designation"> MD/CEO</option>
-                                <option name = "designation" value="designation"> Manager</option>
-                                <option name = "designation" value="designation"> Cashier/Accountant</option>
-                                <option name = "designation" value="designation"> Pump Attendant</option>
-                                <option name = "designation" value="designation"> Supervisor</option>
-                                <option name = "designation" value="designation"> Driver</option>
-                                <option name = "designation" value="designation"> Security</option>
+                                <option name = "md_ceo" value="md_ceo"> MD/CEO</option>
+                                <option name = "manager" value="manager"> Manager</option>
+                                <option name = "cashier_accountant" value="cashier_accountant"> Cashier/Accountant</option>
+                                <option name = "attendant" value="attendant"> Pump Attendant</option>
+                                <option name = "supervisor" value="supervisor"> Supervisor</option>
+                                <option name = "driver" value="driver"> Driver</option>
+                                <option name = "security" value="security"> Security</option>
                         </select>
                         <i class="fa-solid fa-circle-check"></i>
                         <i class="fa-solid fa-circle-exclamation"></i>
@@ -138,12 +150,11 @@
                     <div class="form-group">
                         <label for ='dobField'>Select date of birth</label>
                         <input
-                        type="text"
+                        type="date"
                         name="dateofbirth"
                         id="dobField"
                         class="form-control form-control-md"
-                        placeholder="Date of Birth (mm/dd/yy)"
-                        onfocus = "(this.type='date')"
+                        value="{{ dobofbirth|date:'Y-m-d' }}"
                         />
                         <i class="fa-solid fa-circle-check"></i>
                         <i class="fa-solid fa-circle-exclamation"></i>
@@ -177,9 +188,9 @@
   
 </div>
 
-<script src="{% static 'js/validation.js' %}">
+<!--<script src="{% static 'js/validation.js' %}">
 
-</script>
+</script>-->
 
 {% endblock %}
 

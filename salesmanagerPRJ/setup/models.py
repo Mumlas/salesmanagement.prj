@@ -34,15 +34,19 @@ class Storage(models.Model):
     def __str__(self):
         return(self.storageDesc+" "+ str(self.capacity)+" "+ str(self.branch))
     
+class Price(models.Model):
+    product = models.ForeignKey(Product, related_name="price_product", on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    
 class Pump(models.Model):
-    pupmDesc = models.CharField(max_length=100)
+    pumpDesc = models.CharField(max_length=100, default="None")
     storage = models.ForeignKey(Storage, related_name='pump_storage', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural="Pump"
 
     def __str__(self):
-        return(self.pupmDesc)
+        return(self.pumpDesc)
     
 # Staff
 class Staff(models.Model):
@@ -50,11 +54,12 @@ class Staff(models.Model):
     firstname = models.CharField(max_length=50, db_index=True)
     surname = models.CharField(max_length=50, db_index=True)
     dateofbirth = models.DateField()
+    sex = models.CharField(max_length=10, null=False, db_index=True,default=1)
     employmentdate = models.DateField()
     designation = models.CharField(max_length=30, db_index=True)
     branch = models.ForeignKey(Branch, related_name='staff_branch', on_delete=models.CASCADE)
     email = models.EmailField(unique=True, null=True)
-    phonenumber = models.IntegerField(unique=True, null=False)
+    phonenumber = models.BigIntegerField(unique=True, null=False)
 
     class Meta:
         verbose_name_plural="Staff"
@@ -62,13 +67,3 @@ class Staff(models.Model):
     def __str__(self):
         return(self.firstname +" "+ self.surname)
     
-class Shift(models.Model):
-    type = models.CharField(max_length=20, unique=True, null=False)
-    start = models.DateTimeField(unique=True, null=False)
-    end = models.DateTimeField(unique=True, null=False)
-
-    class Meta:
-        verbose_name_plural="Shift"
-
-    def __str__(self):
-        return(self.type)
