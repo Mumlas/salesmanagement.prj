@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import *
+from . import views
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -9,5 +10,6 @@ urlpatterns = [
     path('pump/', PumpView.as_view(), name='pump'),  
     path('shift/', ShiftView.as_view(), name='shift'),  
     path('storage/', StorageView.as_view(), name='storage'),  
-    path('staff/', StaffView.as_view(), name='staff'),  
+    path('staff/', StaffView.as_view(), name='staff'),
+    path('pump/get-facilities/<int:branch_id>/', views.get_facilities, name='get-facilities'),
 ]

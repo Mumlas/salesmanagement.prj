@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
@@ -59,30 +60,34 @@ class ProductView(View):
 class PumpView(View):
     def get(self, request):
         facilities = Storage.objects.all()
+        branches = Branch.objects.all()
         context = {
             'facilities':facilities,
-            'values':request.POST
+            'values':request.POST,
+            'branches':branches
         }
         return render(request,'setup/pump.html', context)
     
     def post(self, request):
         facilities = Storage.objects.all()
+        branches = Branch.objects.all()
 
         context = {
             'facilities':facilities,
-            'values':request.POST
+            'values':request.POST,
+            'branches':branches
         }
 
         if request.method == "POST":
             pumpDescription = request.POST.get('pumpDescription')
             if not pumpDescription:
                 messages.error(request, 'Provide the Name/Description')
-                return render(request, 'setup/pump.html', {'facilities':facilities})  
+                return render(request, 'setup/pump.html', context)  
 
             facility = request.POST.get('facility')
             if not facility:
                 messages.error(request, 'Select the storage/Tank')
-                return render(request, 'setup/pump.html', {'facilities':facilities})  
+                return render(request, 'setup/pump.html',context)  
             try:
                 facility_id = int(facility)
                 facility = Storage.objects.get(id=facility_id)
@@ -92,10 +97,10 @@ class PumpView(View):
                     'error':'Selected Storage facility does not exist.'
                 })
             
-            Pump.objects.create(pupmDesc=pumpDescription,
+            Pump.objects.create(pumpDesc=pumpDescription,
                                 storage = facility)
             messages.success(request, 'Pump added successfully')
-            return render(request,'setup/pump.html', {'facilities':facilities})  
+            return render(request,'setup/pump.html', context)  
                     
 
 class ShiftView(View):
@@ -287,6 +292,11 @@ class StaffView(View):
         return render(request, "setup/staff.html",{'error': 'Invalid request method'}, status=400)                    
 
 
+def get_facilities(request, branch_id):
+    facilities = Storage.objects.filter(branch_id=branch_id)
+    data = [{"id": f.id, "name": f.storageDesc} for f in facilities]
+    print(f'selected facility: {data}')
+    return JsonResponse(data, safe=False)
 
 
 

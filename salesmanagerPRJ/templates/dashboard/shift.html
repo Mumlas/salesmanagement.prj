@@ -1,0 +1,67 @@
+{% extends "base.html" %} 
+
+{% load static %}
+
+<title>{% block title %} Shift Roster  {% endblock%} </title>
+
+<body>
+    {% block content%}
+
+        <div class="row">
+            <div class="col-md-4"></div>
+
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h2 class="h2">Shift History</h2>
+                        </div> 
+                    </div>
+<hr>
+                        <table class = "table-danger">
+                            <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Shift #</th>
+                                    <th>Session</th>
+                                    <th>Start Time</th>
+                                    <th>Stop Time</th>
+                                    <th>Branch</th>
+                                    <th>Pump Attendant</th>
+                                    <th>Pump #</th>
+                                    <th>Product </th>
+                                    <th>Quantity in Stock </th>
+                                    <th>Status</th>
+                                    <th colspan="2" style ="text-align:center;">Action</th>
+                                </tr>
+                            </thead>
+
+                            {% include "partial/_messages.html" %} 
+
+                            {% csrf_token %}
+                                                        
+                            <tbody>
+                                {% for shift in shifts%}
+
+                                    <tr>
+                                        <td>{{ shift.id }} </td>
+                                        <td> {{ shift.type }} </td>
+                                        <td> {{ shift.start }} </td>
+                                        <td> {{ shift.end }} </td>
+                                        <td> {{ shift.branch }} </td>
+                                        <td> {{ shift.staff }} </td>
+                                        <td> {{ shift.pump }} </td>
+                                        <td> {{ shift.product }} </td>
+                                        <td> {{ shift.stock }} </td>
+                                        {% if shift.is_active%}
+                                            <td> On going </td>
+                                        {% else%}
+                                            <td> Pending </td>
+                                        {% endif%}
+                                        <td> <a class='btn btn-outline-success btn-sm' href = "#">Post Sales</a>
+                                        <td> <a class='btn btn-danger btn-sm' href = "#">Remove</a>
+                                 {% endfor %} 
+                            </tbody>
+                        </table>
+                 
+        </div>
+    {% endblock %}
+</body>

@@ -26,9 +26,9 @@
                                 <label for ='type'>Type</label>
                                 <select class = "form-control form-control-md" name="type" id="type">
                                     <option value = "" disabled selected>Select Type</option>
-                                    <option name = "Morning" value="Morning">Morning</option>
-                                    <option name = "Afternoon" value="Afternoon">Afternoon</option>
-                                    <option name = "Evening" value="Evening">Evening</option>
+                                    <option name = "" value="Morning">Morning</option>
+                                    <option name = "" value="Afternoon">Afternoon</option>
+                                    <option name = "" value="Evening">Evening</option>
                                 </select>
                                 <i class="fa-solid fa-circle-check"></i>
                                 <i class="fa-solid fa-circle-exclamation"></i>
@@ -80,9 +80,7 @@
                                 <label for ='staff'>Staff</label>
                                 <select class = "form-control form-control-md" name="staff" id="staff">
                                     <option value = "" disabled selected>Select Staff</option>
-                                    {% for staff in allStaff%}
-                                    <option name = "staff" value=="{{ staff.id}}">{{ staff.firstname }} {{ staff.surname}}</option>
-                                    {% endfor %}
+
                                 </select>
                                 <i class="fa-solid fa-circle-check"></i>
                                 <i class="fa-solid fa-circle-exclamation"></i>
@@ -144,56 +142,14 @@
                             </div>
 
                             <div class="form-group">
-                                <label for ='quantitySold'>Quantity Sold</label>
-                                <input
-                                type="Number"
-                                name="quantitySold"
-                                id="quantitySold"
-                                class="form-control form-control-md"
-                                />
-                                <i class="fa-solid fa-circle-check"></i>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <p>error message<p>
-                            </div>
-
-                            <div class="form-group">
-                                <label for ='totalSales'>Total Sales</label>
-                                <input
-                                type="Number"
-                                name="totalSales"
-                                id="totalSales"
-                                class="form-control form-control-md"
-                                readonly
-                                />
-                                <i class="fa-solid fa-circle-check"></i>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <p>error message<p>
-                            </div>                    
-
-                            <div class="form-group">
-                                <label for ='actualSales'>Actual Sales</label>
-                                <input
-                                type="Number"
-                                name="actualSales"
-                                id="actualSales"
-                                class="form-control form-control-md"
-                                readonly
-                                />
-                                <i class="fa-solid fa-circle-check"></i>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <p>error message<p>
-                            </div> 
-
-                            <div class="form-group">
                                 <label for ='active'>Activate</label>
                                 <input
                                     type = "checkbox"
                                     name="active" 
                                     id="active"
+                                    disabled="disabled"
                                 />
                             </div>
-
-
 
                             <input type='submit' value="Create Shift" class="btn btn-block btn-primary btn-primary-lg py-3 submit-btn" />
                         </form> <!-- close form-->

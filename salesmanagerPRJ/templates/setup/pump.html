@@ -1,4 +1,4 @@
-{% extends "base_auth.html" %} 
+{% extends "base.html" %} 
 
 {% load static %}
 
@@ -25,6 +25,23 @@
                     {% include "partial/_messages.html" %} 
 
                     <div class="form-group">
+                        <label for = "branchid">Branch</label>
+                        <select class = "form-control form-control-md" name="branch" id="branchIDField">
+                            <option value="" disabled selected> Select Branch </option>
+                            {% for branch in branches %}
+                                <option name = "branch" value="{{ branch.id }}">{{branch.id}} - {{ branch.branchName}}</option>
+                            {% endfor %}
+                        </select><br>
+                    </div>   
+                    
+                    <div class="form-group">
+                        <label for = "facilityid">Storage Facility</label>
+                        <select class = "form-control form-control-md" name="facility" id="facilityIDField">
+                            <option value="" disabled selected> Select Storage Facility</option>
+                        </select><br>
+                    </div>   
+
+                    <div class="form-group">
                         <label for = "pumpDescription">Enter Pump No</label>
                         <input
                         type="text"
@@ -34,17 +51,7 @@
                         placeholder="Enter Pump Description"
                         />
                     </div>
-
-                    <div class="form-group">
-                        <label for = "facilityid">Storage Facility</label>
-                        <select class = "form-control form-control-md" name="facility" id="facilityIDField">
-                            <option value="" disabled selected> Select Storage Facility</option>
-                            {% for facility in facilities %}
-                                <option name = "facility" value="{{ facility.id }}">{{facility.id}} - {{ facility.storageDesc}}</option>
-                            {% endfor %}
-                        </select><br>
-                    </div>                                        
-                    <h2>{{ facility }} </h2>
+                                     
                     <input type='submit' value="Submit" class="btn btn-block btn-primary py-3 submit-btn form-control-lg" />
                 </form> <!-- close form-->
             </div>
@@ -57,7 +64,7 @@
   
 </div>
 
-<script src="{% static 'js/register.js' %}">
+<script src="{% static 'js/pump.js' %}">
 
 </script>
 

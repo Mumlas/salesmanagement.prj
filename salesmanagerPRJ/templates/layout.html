@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Application{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'style/styles.css' %}">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-left">
+            <nav>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'contact' %}">Contact</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">Sign Out</a>
+            {% else %}
+                <a href="{% url 'login' %}">Sign In</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul>
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'settings' %}">Settings</a></li>
+                <!-- Add more sidebar links as needed -->
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content">
+            {% block content %}
+            <!-- Extended pages will add content here -->
+            {% endblock %}
+        </main>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>Follow us on:</p>
+        <a href="https://facebook.com">Facebook</a> |
+        <a href="https://twitter.com">Twitter</a> |
+        <a href="https://instagram.com">Instagram</a>
+        <p>&copy; 2024 My Application</p>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

@@ -17,11 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+admin.site.site_title = "Al-Manas Oil and Gas"
+admin.site.site_header = "Inventory & Transaction Management"
+admin.site.index_title = "Al-Manas Admin Panel"
+
 urlpatterns = [
     path('', include('sales.urls')), # rout to sales urls
     path('validation/', include('validation.urls')),
     path('admin/', admin.site.urls),
     path('setup/', include('setup.urls')),
     path('inventory/', include('inventory.urls')),
-    path('sales/',include('sales.urls'))
+    path('sales/',include('sales.urls')),
+    path('dashboard/', include('dashboard.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

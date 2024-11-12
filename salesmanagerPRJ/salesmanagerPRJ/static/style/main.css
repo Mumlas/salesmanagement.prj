@@ -83,3 +83,7 @@
 .showPasswordToggle:hover {
   transform: scale(1.2);
 }
+
+.bg-white {
+  color: #ffffff;
+}

@@ -9,7 +9,7 @@ class AdminUser(UserAdmin):
 
     model = User
 
-    list_display = ['get_first_name','get_surname', 'phone_number', 'email', 'is_staff', 'is_active']
+    list_display = ['get_first_name','get_surname', 'phone_number', 'is_staff', 'is_active']
     list_filter = ['is_staff', 'is_active']
 
     def get_first_name(self, object):
@@ -38,4 +38,4 @@ class AdminUser(UserAdmin):
     ordering = ('privileges',)
 
     # Register your models here.
-admin.site.register(User, AdminUser)
+#admin.site.register(User, AdminUser)

@@ -1,0 +1,101 @@
+{% extends "base.html" %} 
+
+{% load static %}
+
+{% block title %} {{user.staff }} - Dashboard {% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+        <div class="card-body">
+            <div class="card-title">
+                <div class="row mt-5">
+                    <div class="col-md-12">
+                        <div class="border bg-white p-3">
+                            <h4 class='alert alert-info align-center'>Key Indicators in Absolute Figure</h4>
+                            <div class="row my-5">
+                                <div class="col-md-3 bg-white">
+                                    <div class="border">
+                                        <canvas id="product">
+
+                                        </canvas>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 bg-white">
+                                    <div class="border">
+                                        <canvas id="quantity">
+
+                                        </canvas>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 bg-white">
+                                    <div class="border">
+                                        <canvas id="totalsale">
+
+                                        </canvas>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="border">
+                                        <canvas id="highesale">
+
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="border bg-white p-3">
+        <div class="row my-5">
+            <h4 class='alert alert-info'>Drilling Down to Specifics</h4>
+            <div class="col-md-4">
+                <div class="border bg-white">
+                    <h6 class = 'alert alert-primary'>Sales by Products</h6>
+                    <canvas id="myChart1" width='200' height='300'>
+    
+                    </canvas>
+                </div>
+            </div>
+    
+            <div class="col-md-4">
+                <div class="border bg-white">
+                    <h6 class = 'alert alert-primary'>Sales by Branches</h6>
+                    <canvas id="myChart2" width='200' height='300'>
+    
+                    </canvas>
+                </div>
+            </div>
+    
+    
+            <div class="col-md-4">
+                <div class="border bg-white">
+                    <h6 class = 'alert alert-primary'> Sales (Last 7 days)</h6>
+                    <canvas id="myChart3" width='200' height='300'>
+    
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row my-4">
+        <table>
+            <th>
+                <td>Title 1</td>
+                <td>Title 2</td>
+                <td>Title 3</td>
+                <td>Title 4</td>
+                <td>Title 5</td>
+            </th>
+        </table>
+    </div>
+</div>
+{% endblock %}

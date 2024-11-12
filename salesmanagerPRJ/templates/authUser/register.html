@@ -1,0 +1,64 @@
+{% extends "base.html" %} 
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block content%}
+
+<div class="row">
+
+  <div class="col-md-4"></div>
+
+  <div class="col-md-4">
+        <div class="card mt-5">
+
+            <div class="card-body">
+
+                <div class="card-title py-2">
+                    <h4>User Login Details</h4>
+                </div> 
+
+                <form action="{% url 'create_user' %}" method="POST"> 
+                    
+                    {% csrf_token %}
+                    
+                    {% include "partial/_messages.html" %} 
+                    <fieldset>
+                        <legend class='border-bottom pd-2 mb-4 text-center pt-4 ' style = "background:gold;">User Creation</legend>
+                        <div class="row">
+                            <div class="form-group col-md-6 mb-0">
+                                {{ form.phone_number|as_crispy_field }}
+                            </div>
+        
+                            <div class="form-group col-md-6 mb-0">
+                                {{ form.name|as_crispy_field }}
+                            </div>               
+        
+                            <div class="form-group col-md-6 mb-0">
+                                {{ form.privileges|as_crispy_field }}
+                            </div>
+                            <div class="form-group col-md-6 mb-0">
+                                {{ form.password|as_crispy_field }}
+                            </div>                            
+                            <div class="form-group col-md-6 mb-0">
+                                <input type="password" placeholder="confirm Password" name="password2"/>
+                            </div>
+                        </fieldset>
+
+                    <input type='submit' value="Create User" class="btn btn-block btn-primary py-3 submit-btn" />
+                </form> <!-- close form-->
+            </div>
+        </div><!-- close card-->
+    </div>
+
+    <div class="col-md-4">
+
+    </div>
+  
+</div>
+
+<script src="{% static 'js/user.js' %}">
+
+</script>
+
+{% endblock %}

@@ -28,12 +28,12 @@ class CustomerUserManager(UserManager):
         return self._create_user(phone_number, password, **extra_fields)
 
 class Privileges(models.TextChoices):
-    PUMP_ATTENDANT = 'pump_attendant'
-    SUPERVISOR = 'supervisor'
-    MANAGER = 'manager'
-    CASHIER = 'cashier'
-    MD_CEO = 'md_ceo'
-    DRIVER = 'driver'
+    PUMP_ATTENDANT = 'Pump_Attendant'
+    SUPERVISOR = 'Supervisor'
+    MANAGER = 'Manager'
+    CASHIER = 'Cashier'
+    MD_CEO = 'MD_CEO'
+    DRIVER = 'Driver'
 
 def validate_phone(value):
     phone_regex = re.compile(r'^\+?0?\d{10}$')
@@ -42,12 +42,12 @@ def validate_phone(value):
     
 class User(AbstractBaseUser,PermissionsMixin):
     phone_number = models.CharField(_('phone number'), validators=[validate_phone], max_length=11, unique=True, null=False)
-    email = models.CharField(max_length=255, default='',null=True, unique=True)
-    name = models.OneToOneField(Staff, on_delete=models.CASCADE, related_name='user_staff', null=True, blank=True)
+    name = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='user_staff', null=True, blank=True)
+    password= models.CharField(max_length=100)
 
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    privileges = models.CharField(max_length=50, choices=Privileges.choices)
+    privileges = models.CharField(max_length=100, choices=Privileges.choices)
 
     last_login = models.DateTimeField(blank=True, null=True)
 
@@ -70,6 +70,3 @@ class User(AbstractBaseUser,PermissionsMixin):
     @property
     def last_name(self):
         return self.name.surname
-    
-    def get_short_name(self):
-        return self.name or self.email.split('@')[0]

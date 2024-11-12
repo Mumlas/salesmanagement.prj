@@ -15,7 +15,7 @@ class Inventory(models.Model):
         verbose_name_plural="Inventory"
 
     def __str__(self) -> str:
-        return(self.quantity +" liters of "+ self.product, +" as of"+ str(self.dateUpdated))
+        return(f'{self.quantity} liters of {self.product}, as of {self.dateUpdated}')
     
 class InventorySnapShot(models.Model):
     inventoryv=models.ForeignKey(Inventory, on_delete=models.CASCADE)

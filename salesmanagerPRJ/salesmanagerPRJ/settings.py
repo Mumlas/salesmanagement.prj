@@ -40,13 +40,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+
+    #install apps
+    'crispy_bootstrap5',
+    'crispy_forms',
+    'django_extensions',
 
     # custom apps
     'sales',
     'setup',
     'validation',
     'inventory',
-    'authUser',
+    #'authUser',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -143,8 +150,15 @@ MESSAGE_TAGS = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'authUser.User'
+AUTH_USER_MODEL = "validation.CustomUser"
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-]
+#crispy forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+#nAUTHENTICATION_BACKENDS = [
+#    'django.contrib.auth.backends.ModelBackend',
+#]
+
+LOGIN_URL = 'login_user'

@@ -29,17 +29,15 @@
                                     <th>Pump #</th>
                                     <th>Product </th>
                                     <th>Quantity in Stock </th>
-                                    <th>Quantity Sold</th>
-                                    <th>Total Sales</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    <th colspan="2" style ="text-align:center;">Action</th>
                                 </tr>
                             </thead>
 
-                            {% csrf_token %}
-                            
                             {% include "partial/_messages.html" %} 
-                            
+
+                            {% csrf_token %}
+                                                        
                             <tbody>
                                 {% for shift in shifts%}
 
@@ -53,15 +51,14 @@
                                         <td> {{ shift.pump }} </td>
                                         <td> {{ shift.product }} </td>
                                         <td> {{ shift.stock }} </td>
-                                        <td> {{ shift.quantity_sold }} </td>
-                                        <td> {{ shift.total_sales }} </td>
                                         {% if shift.is_active%}
                                             <td> On going </td>
                                         {% else%}
                                             <td> Pending </td>
                                         {% endif%}
-                                        <td> <a href = "{% url 'edit_shift' %}">Edit</a>
-                                {% endfor %} 
+                                        <td> <a class='btn btn-outline-success btn-sm' href = "{% url 'shift_edit' shift.id %}">Edit Shift</a>
+                                        <td> <a class='btn btn-danger btn-sm' href = "{% url 'shift_remove' shift.id %}">Remove</a>
+                                 {% endfor %} 
                             </tbody>
                         </table>
                     <!--  <form action="{% url 'shift_management' %}" method="POST" name = "shift" id="shift"> 
