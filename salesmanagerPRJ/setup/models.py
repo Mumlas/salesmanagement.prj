@@ -38,6 +38,12 @@ class Price(models.Model):
     product = models.ForeignKey(Product, related_name="price_product", on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     
+    class Meta:
+        verbose_name_plural="Price"
+
+    def __str__(self):
+        return(self.product.productName+" "+ str(self.price))
+    
 class Pump(models.Model):
     pumpDesc = models.CharField(max_length=100, default="None")
     storage = models.ForeignKey(Storage, related_name='pump_storage', on_delete=models.CASCADE)

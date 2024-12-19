@@ -1,8 +1,8 @@
-{% extends "base.html" %} 
+{% extends "base_dashboard.html" %} 
 
 {% load static %}
 
-<title> {% title content %} {{ user.staff}} Sales History {% endtitle %}</title>
+<title> {% block title %} {{ user.staff}} Sales History {% endblock %}</title>
 
 <body>
     {% block content%}
@@ -16,12 +16,12 @@
                     </div> 
                 </div>
 <hr>
-                    <table class = "table-danger">
+                    <table class = "data-table">
                         <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>
                         <thead>
-                            <tr>
+                             <tr>
+                                <th>Date</th>
                                 <th>Shift #</th>
-                                <th>Branch</th>
                                 <th>Staff</th>
                                 <th>Product</th>
                                 <th>Quantity Sold</th>
@@ -30,8 +30,7 @@
                                 <th>Margin</th>
                                 <th>Status</th>
                                 <th>Remark</th>
-                                <th>Action</th>
-                            </tr>
+                             </tr>
                         </thead>
 
                         {% csrf_token %}
@@ -39,19 +38,18 @@
                         {% include "partial/_messages.html" %} 
                         
                         <tbody>
-                            {% for sale in sales% }
-
-                                <tr>
-                                    <td>{{ sale.id }} </td>
-                                    <td> {{ sale.shift }} </td>
-                                    <td> {{ sale.branch_id }} </td>
-                                    <td> {{ sale.staff }}
-                                    <td> {{ sale.product_id }} </td>
+                            {% for sale in sales %}
+                            
+                            <tr>
+                                    <td> {{ sale.shift.end|date:'d M Y' }} </td>
+                                    <td> {{ sale.shift.type }} </td>
+                                    <td> {{ sale.shift.staff }}
+                                    <td> {{ sale.shift.inventory.product }} </td>
                                     <td> {{ sale.quantity_sold }} </td>
                                     <td> {{ sale.expected_sales }} </td>
                                     <td> {{ sale.actual_sales }} </td>
                                     <td> {{ sale.margin }} </td>
-                                    <td> {{ sale.status }} </td>
+                                    <td> {{ sale.reconciliation }} </td>
                                     <td> {{ sale.remark }} </td>
                              {% endfor %} 
                         </tbody>

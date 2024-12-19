@@ -5,15 +5,16 @@ from django.contrib import messages
 from django.views import View
 from django.http import JsonResponse
 from setup.models import Product, Storage, Staff, Branch
-from .models import Inventory
+from .models import Inventory, InventorySnapShot
 from django.views.decorators.csrf import csrf_exempt
 from validation.models import CustomUser
 
 def get_branches(request):
-    branches = Branch.objects.all()
-    context = {
-        "branches":branches
-    }
+    
+    branchid=request.user.staff.branch_id
+    branch = Branch.objects.filter(id=branchid)
+    context = {"branch":branch}
+
     return render(request, "inventory/update.html", context)
 
 def get_facilities(request, branch_id):
@@ -70,8 +71,9 @@ def getInventory(request):
 @login_required(login_url='/validation/login/')
 def update_inventory(request):
 
-    branches = Branch.objects.all()
-    context = {"branches":branches}
+    branchid=request.user.staff.branch_id
+    branch = Branch.objects.get(id=branchid)
+    context = {"branch":branch}
 
     if request.method == "POST":
         #form_data = inventoryForm()
@@ -130,13 +132,24 @@ def update_inventory(request):
                 messages.error(request, 'Select Date the Product was supplied')
                 return redirect('get_branches')
             print(f'Data type of {branchid} is {type(branch)}')
-            Inventory.objects.create(product=productid,
+
+            inventory = Inventory.objects.get(product=productid,
                                     storage = facility,
-                                    quantity = inStock,
-                                    dateUpdated =dateSupplied,
                                     updatedBy = staff,
                                     branch = branch
                                     )
+            print(f'Old stock {inventory}')
+            mirror_inventory = InventorySnapShot.objects.create(
+                                inventory = inventory,
+                                product = inventory.product,
+                                quantity = inventory.quantity,
+                                updatedBy = inventory.updatedBy
+                                )
+            inventory.quantity=inStock
+            inventory.save()
+            print(f'New stock {inventory}')
+            mirror_inventory.save()
+
             messages.success(request, 'Inventory Update successfully')
             return redirect('get_branches')
 

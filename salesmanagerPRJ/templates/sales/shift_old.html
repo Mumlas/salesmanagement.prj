@@ -1,0 +1,169 @@
+{% extends "base.html" %} 
+
+{% load static %}
+
+
+<body>
+    {% block content%}
+
+        <div class="row">
+            <div class="col-md-4"></div>
+
+        <div class="col-md-4">
+                <div class="card mt-5">
+
+                    <div class="card-body">
+
+                        <form action="{% url 'shift' %}" method="POST" name = "shift" id="shift"> 
+                            <div class="card-title">
+                                <h2>Shift</h2>
+                            </div> 
+                            {% csrf_token %}
+                            
+                            {% include "partial/_messages.html" %} 
+
+                            <div class="form-group">
+                                <label for ='type'>Type</label>
+                                <select class = "form-control form-control-md" name="type" id="type">
+                                    <option value = "" disabled selected>Select Type</option>
+                                    <option name = "" value="Morning">Morning</option>
+                                    <option name = "" value="Afternoon">Afternoon</option>
+                                    <option name = "" value="Evening">Evening</option>
+                                </select>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <p>error message<p>
+                            </div>
+                        
+                            <div class="form-group">
+                                <label for ='start'>Start Time</label>
+                                <input
+                                type="datetime-local"
+                                name="start"
+                                id="start"
+                                class="form-control form-control-md"
+                                value="{{ start|date:'Y-m-d H:M' }}"
+                                />
+                                <i class="fa-solid fa-circle-check"></i>
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <p>error message<p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for ='stop'>Stop Time</label>
+                                <input
+                                type="datetime-local"
+                                name="stop"
+                                id="stop"
+                                class="form-control form-control-md"
+                                value="{{ start|date:'Y-m-d H:M' }}"
+                                />
+                                <i class="fa-solid fa-circle-check"></i>
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <p>error message<p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for ='branchIDField'>Select Branch</label>
+                                <select class = "form-control form-control-md" name="branch" id="branchIDField">
+                                    <option value="" disabled selected> Select Branch</option>
+                                    {% for branch in branches %}
+                                        <option name = "branch" value="{{ branch.id }}"> {{ branch.branchName}}</option>
+                                    {% endfor %}
+                                </select>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <p>error message<p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for ='staff'>Staff</label>
+                                <select class = "form-control form-control-md" name="staff" id="staff">
+                                    <option value = "" disabled selected>Select Staff</option>
+
+                                </select>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <p>error message<p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for ='facility'>Storage Tank</label>
+                                <select class = "form-control form-control-md" name="facility" id="facility">
+                                    <option value = "" disabled selected>Select Storage</option>
+                                    {% for facility in facilities%}
+                                    <option name = "facility" value=="{{ facility.id}}">{{ facility.storageDesc }}</option>
+                                    {% endfor %}
+                                </select>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <p>error message<p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for ='pump'>Pump</label>
+                                <select class = "form-control form-control-md" name="pump" id="pump">
+                                    <option value = "" disabled selected>Select Pump</option>
+                                    {% for pump in pumps %}
+                                    <option name = "pump" value=="{{ pump.id}}">{{ pump.pupmDesc }}</option>
+                                    {% endfor %}
+                                </select>
+                                <i class="fa-solid fa-circle-check"></i>
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <p>error message<p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for ='product'>Product</label>
+                                <input
+                                type="text"
+                                name="product"
+                                id="product"
+                                class="form-control form-control-md"
+                                readonly
+                                />
+                                <i class="fa-solid fa-circle-check"></i>
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <p>error message<p>
+                            </div>                    
+
+                            <div class="form-group">
+                                <label for ='stock'>Quantity in Stock</label>
+                                <input
+                                type="Number"
+                                name="stock"
+                                id="stock"
+                                class="form-control form-control-md"
+                                readonly
+                                />
+                                <i class="fa-solid fa-circle-check"></i>
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <p>error message<p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for ='active'>Activate</label>
+                                <input
+                                    type = "checkbox"
+                                    name="active" 
+                                    id="active"
+                                    disabled="disabled"
+                                />
+                            </div>
+
+                            <input type='submit' value="Create Shift" class="btn btn-block btn-primary btn-primary-lg py-3 submit-btn" />
+                        </form> <!-- close form-->
+                    </div>
+                </div><!-- close card-->
+            </div>
+        </div>
+
+        <div class="col-md-4">
+
+        </div>
+
+        <script src = "{% static 'js/shift.js' %}">
+        </script>
+
+    {% endblock %}
+</body>

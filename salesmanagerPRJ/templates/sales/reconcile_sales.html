@@ -1,0 +1,112 @@
+{% extends "base_dashboard.html" %} 
+{% load crispy_forms_tags %}
+{% load static %}
+
+<title>{% block title %} Reconcile Sales - {{user.staff}} {% endblock%} </title>
+
+<body>
+    {% block content%}
+
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">Prices
+            <div class="container">
+                <ul>
+                    {% for product in products %}
+                    <li>
+                        <h4>
+                            {{ product.product }} : {{ product.price}} 
+                        </h4>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+    
+        <div class="col-md-4"></div>
+    
+        <div class="col md-4">
+            <div class="card mt-2">
+                <div class="card-body">
+
+                    <form method="POST" action="{% url 'reconcile-sale' sale.id %}">
+                        {% csrf_token %}
+                        <div class="card-title">
+                            <h2>Sales Reconciliation</h2>
+                        </div> 
+
+                        <div class="form-group">
+                            <label for ='shift'>Shift</label>
+                            <input
+                            type="text"
+                            name="shift"
+                            id="shift"
+                            class="form-control form-control-md"
+                            value="{{ sale.shift.type }} - {{ sale.shift.start }}"
+                            readonly
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for ='branch'>Branch</label>
+                            <input
+                            type="text"
+                            name="branch"
+                            id="branch"
+                            class="form-control form-control-md"
+                            value="{{ sale.shift.inventory.branch.branchName }}"
+                            readonly
+                            />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for ='product'>Product</label>
+                            <input
+                            type="text"
+                            name="product"
+                            id="product"
+                            class="form-control form-control-md"
+                            value="{{ sale.shift.inventory.product.productName }}"
+                            readonly
+                            />
+                        </div>
+
+                        <div class="form-group col-md-6 mb-0">
+                            {{ form.quantity_sold|as_crispy_field }}
+                        </div>               
+
+                        <div class="form-group col-md-6 mb-0">
+                            {{ form.expected_sales|as_crispy_field }}
+                        </div>
+
+                        <div class="form-group col-md-6 mb-0">
+                            {{ form.actual_sales|as_crispy_field }}
+                        </div>
+
+                        <div class="form-group col-md-6 mb-0">
+                            {{ form.margin|as_crispy_field }}
+                        </div>
+
+                        <div class="form-group col-md-6 mb-0">
+                            {{ form.remark|as_crispy_field }}
+                        </div>
+                    
+                        <div class="form-group pt-2 col-md-6 mb-0">
+                        <button class="btn btn-outline-success" type='submit' style="width: 200px; height: 50px;">Reconcile Sales</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4"></div>
+
+    </div>
+    {% endblock%}
+
+
+</body>

@@ -1,0 +1,63 @@
+{% extends "base_dashboard.html" %} 
+
+{% load static %}
+
+<title> {% title content %} {{ user.staff}} Sales History {% endtitle %}</title>
+
+<body>
+    {% block content%}
+
+    <div class="row">
+        <div class="col-md-4"></div>
+
+                <div class="card-body">
+                    <div class="card-title">
+                        <h2 class="h2">Sales History</h2>
+                    </div> 
+                </div>
+<hr>
+                    <table class = "table-danger">
+                        <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>
+                        <thead>
+                            <tr>
+                                <th>Shift #</th>
+                                <th>Branch</th>
+                                <th>Staff</th>
+                                <th>Product</th>
+                                <th>Quantity Sold</th>
+                                <th>Expected Sales </th>
+                                <th>Actual Sales </th>
+                                <th>Margin</th>
+                                <th>Status</th>
+                                <th>Remark</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        {% csrf_token %}
+                        
+                        {% include "partial/_messages.html" %} 
+                        
+                        <tbody>
+                            {% for sale in sales% }
+
+                                <tr>
+                                    <td>{{ sale.id }} </td>
+                                    <td> {{ sale.shift }} </td>
+                                    <td> {{ sale.branch_id }} </td>
+                                    <td> {{ sale.staff }}
+                                    <td> {{ sale.product_id }} </td>
+                                    <td> {{ sale.quantity_sold }} </td>
+                                    <td> {{ sale.expected_sales }} </td>
+                                    <td> {{ sale.actual_sales }} </td>
+                                    <td> {{ sale.margin }} </td>
+                                    <td> {{ sale.status }} </td>
+                                    <td> {{ sale.remark }} </td>
+                             {% endfor %} 
+                        </tbody>
+                    </table>
+             
+    </div>
+
+    {% endblock %}
+</body>

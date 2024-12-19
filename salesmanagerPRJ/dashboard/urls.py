@@ -10,5 +10,6 @@ urlpatterns = [
     path('branch/', views.branch_view, name='branch'),
     path('product/', views.product_view, name='product'),
     path('sale/', views.product_view, name='sale'),
-    path('', views.dashboard, name = 'main-dashboard')
+    path('', views.main_view, name = 'dashboard-main'),
+    path('md_chart/', views.md_chart, name='md_chart'),
 ]

@@ -3,8 +3,8 @@ from .models import Shift, Sales
 # Register your models here.
 @admin.register(Shift)
 class shiftAdmin(admin.ModelAdmin):
-    list_display = ('id','type','start','end','staff','branch','product','stock','is_active',)
-    list_filter = ('is_active','branch','stock')
+    list_display = ('id','type','start','end','staff','status','inventory','pump')
+    list_filter = ('status','type')
 
 
 @admin.register(Sales)

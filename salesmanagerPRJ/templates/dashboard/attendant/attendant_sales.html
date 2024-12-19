@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base_dashboard.html" %} 
 
 {% load static %}
 
@@ -22,14 +22,15 @@
                         <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>
                         <thead>
                             <tr>
-                                <th>Shift #</th>
+                                <th>Sales #</th>
+                                <th>Shift</th>
                                 <th>Branch</th>
                                 <th>Product</th>
                                 <th>Quantity Sold</th>
                                 <th>Expected Sales </th>
                                 <th>Actual Sales </th>
                                 <th>Margin</th>
-                                <th>Status</th>
+                                <th>Reconciliation</th>
                                 <th>Remark</th>
                             </tr>
                         </thead>
@@ -39,23 +40,22 @@
                         {% include "partial/_messages.html" %} 
                         
                         <tbody>
-                            {% for sale in sales% }
+                            {% for sale in sales %}
 
                                 <tr>
                                     <td>{{ sale.id }} </td>
                                     <td> {{ sale.shift }} </td>
-                                    <td> {{ sale.branch_id }} </td>
-                                    <td> {{ sale.staff }}
-                                    <td> {{ sale.product_id }} </td>
+                                    <td> {{ sale.shift.inventory.branch }}
+                                    <td> {{ sale.shift.inventory.product }} </td>
                                     <td> {{ sale.quantity_sold }} </td>
                                     <td> {{ sale.expected_sales }} </td>
                                     <td> {{ sale.actual_sales }} </td>
                                     <td> {{ sale.margin }} </td>
-                                    {% if sale.status%}
+                                    {% if sale.status %}
                                         <td> reconciled </td>
-                                    {% else%}
+                                    {% else %}
                                         <td> pending </td>
-                                    {% endif%}
+                                    {% endif %}
                                     <td> {{ sale.remark }} </td>
                              {% endfor %} 
                         </tbody>

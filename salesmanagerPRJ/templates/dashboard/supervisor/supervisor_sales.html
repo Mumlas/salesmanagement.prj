@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base_dashboard.html" %} 
 
 {% load static %}
 
@@ -11,15 +11,16 @@
 
                 <div class="card-body">
                     <div class="card-title">
-                        <h2 class="h2">Shift History</h2>
+                        <h2 class="h2">Sales History</h2>
                     </div> 
                 </div>
 <hr>
-                    <table class = "table-danger">
+                    <table class="datatable-table">
                         <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>
                         <thead>
                             <tr>
-                                <th>Shift #</th>
+                                <th>Sale #</th>
+                                <th>Date</th>
                                 <th>Branch</th>
                                 <th>Staff</th>
                                 <th>Product</th>
@@ -38,14 +39,14 @@
                         {% include "partial/_messages.html" %} 
                         
                         <tbody>
-                            {% for sale in sales% }
+                            {% for sale in sales %}
 
                                 <tr>
                                     <td>{{ sale.id }} </td>
-                                    <td> {{ sale.shift }} </td>
-                                    <td> {{ sale.branch_id }} </td>
-                                    <td> {{ sale.staff }}
-                                    <td> {{ sale.product_id }} </td>
+                                    <td> {{ sale.shift.start }} </td>
+                                    <td> {{ sale.shift.inventory.branch }} </td>
+                                    <td> {{ sale.shift.staff }}
+                                    <td> {{ sale.shift.inventory.product }} </td>
                                     <td> {{ sale.quantity_sold }} </td>
                                     <td> {{ sale.expected_sales }} </td>
                                     <td> {{ sale.actual_sales }} </td>
@@ -56,7 +57,7 @@
                                         <td> pending </td>
                                     {% endif%}
                                     <td> {{ sale.remark }} </td>
-                                    <td> <a class='btn btn-outline-success btn-sm' href = "{% url 'reconcile-sales' sale.id %}">Reconcile</a>
+                                    <td> <a class='btn btn-outline-success btn-sm' href = "{% url 'reconcile-sale' sale.id %}">Reconcile</a>
                              {% endfor %} 
                         </tbody>
                     </table>

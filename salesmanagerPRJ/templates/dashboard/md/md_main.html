@@ -1,0 +1,308 @@
+{% extends "base_dashboard.html" %} {% load static %} {% load humanize %} 
+{% block title %} {{user.staff }} - Dashboard {% endblock %}
+
+
+{% block content %}
+
+<div class="containter">
+<form action="{% url 'md_chart' %}" method='POST'>
+   {% csrf_token %}
+  <div class="row mb-2">
+
+    <div class="col-xl-1 col-md-6"></div>
+
+    <div class="col-xl-2 col-md-6" style="display: inline-block;">
+      <div class="form-group">
+        <label for ='dateFilter'>Start Date</label>
+        <input
+        type="date"
+        name="startdateFilter"
+        id="startdateFilter"
+        class="form-control form-control-md"
+        />
+      </div>
+    </div>
+
+    <div class="col-xl-2 col-md-6" style="display: inline-block;">
+      <div class="form-group">
+        <label for ='dateFilter'>End Date</label>
+        <input
+        type="date"
+        name="enddateFilter"
+        id="enddateFilter"
+        class="form-control form-control-md"
+        />
+      </div>
+    </div>
+  
+
+    <div class="col-xl-2 col-md-6" style="display: inline-block;">
+      <div class="form-group">
+          <label for ='branchFilter'> Branch</label>
+          <select class = "form-control form-control-md" name="branchFilter" id="branchFilter">
+            <option value="" disabled selected> Select Branch </option>
+            {% for branch in branches %}
+                <option name = "branch" value="{{ branch.id }}">{{ branch.id }} - {{ branch.branchName }}</option>
+            {% endfor %}
+        </select>
+      </div>
+    </div>
+  
+    <div class="col-xl-2 col-md-6" style="display: inline-block;">
+      <div class="form-group">
+          <label for ='productFilter'> Product</label>
+          <select class = "form-control form-control-md" name="productFilter" id="productFilter">
+            <option value="" disabled selected> Select Product </option>
+            {% for product in products %}
+                <option name = "product" value="{{ product.id }}">{{ product.id }} - {{ product.productName }}</option>
+            {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="col-xl-2 col-md-6" style="display: inline-block;">
+      <div class="form-group">
+          <label for ='productFilter'> Apply Filter</label>
+          <input type="submit" class='btn btn-outline-primary form-control form-control-md' value='Apply' />
+      </div>
+    </div>
+
+  </div>
+</form>
+</div>
+
+<div class="row m-2 custom-background" style="outline: 2px solid dark;">
+  <div class="col">
+    <div class="container-fluid p-0 m-0">
+      <div class="row no-gutters custom-background" style="background-color:black;" id ='aggegrate_sales'>
+        <h4 style="color:white;">Sales</h4>
+          {% for s in aggregate_sales %}
+              <div class="col-4 col-md-2 col-lg-4 col-xl-4">
+                  <div class="card custom-background" >
+                      <div class="card-body custom-background" style="background-color:black;">
+                          <h4 class="card-title" style='color:yellow;'> 
+                              {{ s.quantity_sold|floatformat:0|intcomma }}
+                          </h4>
+                          <h5 class = 'card-title' style='color:green;'>
+                              {{ s.actual_sales|floatformat:0|intcomma }}
+                          </h5>
+                          <h6 class = 'card-title' style='color:red;'> 
+                              {{ s.margin|floatformat:0|intcomma }}  
+                                {% if s.margin < 0 %}
+                                    <span>↓</span>
+                                {% endif %}
+                                {% if s.quantity > 0 %}
+                                    <span>↑</span>
+                                {% endif %}
+                          </h6>
+                          <p class="card-text">{{ s.product_name }}</p>
+                      </div>
+                  </div>
+              </div>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row m-2 custom-background" style="outline: 2px solid btn-info">
+  <div class="col">
+    <div class="container-fluid p-0 m-0">
+      <div class="row no-gutters custom-background" style="background-color:black;" id='aggregate_stock'>
+        <h4 style="color:white;">Stocks</h4>
+          {% for s in aggregate_stock %}
+              <div class="col-4 col-md-2 col-lg-4 col-xl-4">
+                  <div class="card custom-background">
+                      <div class="card-body custom-background" style="background-color:black;">
+                          <h3 class="card-title" style='color:yellow;'> 
+                              {{ s.quantity|floatformat:0|intcomma }}
+                                {% if s.quantity < 0 %}
+                                    <span>↓</span>
+                                {% endif %}
+                                {% if s.quantity > 0 %}
+                                    <span>↑</span>
+                                {% endif %}
+                          </h3>
+                          <p class="card-text">{{ s.product_name }}</p>
+                      </div>
+                  </div>
+              </div>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- End of first row -->
+
+<div class="row">
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-chart-area me-1"></i>
+      Sales Overtime by Products
+    </div>
+    <div class="card-body" id="sales_history">
+    {{ sales_history|safe }}
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-5">
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="fas fa-chart-bar me-1"></i>
+        Sales by Products
+      </div>
+      <div class="card-body" id='stock_chart'>
+        {{ stock_chart|safe }}          
+      </div>
+    </div>
+  </div>
+    <div class="col-xl-6">
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="fas fa-chart-bar me-1"></i>
+        Stock by Product
+      </div>
+      <div class="card-body" id='branch_chart'>
+        {{ branch_chart|safe }}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of second row -->
+
+  <div class="row">
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        <h3>  Status of Stock </h3>
+      </div>
+      <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
+        <div class="datatable-container" id='stock_table'>
+          <table id="stock">
+            <thead>
+              <tr>
+                <th >Branch</th>
+                <th >Tank</th>
+                <th >Product</th>
+                <th >Quantity</th>
+                <th >Date Updated</th>
+                <th >Updated By</th>
+              </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for s in stocks %}
+              <tr data-index="0">
+                <td>{{ s.branch }} </td>
+                <td> {{ s.storage.storageDesc }} </td>
+                <td> {{ s.product.productName }} </td>
+                <td> {{ s.quantity|floatformat:1|intcomma }} </td>
+                <td> {{ s.dateUpdated|date:'d M Y' }} </td>
+                <td> {{ s.updatedBy }} </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="datatable-bottom">
+        </div>
+      </div> 
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        <h3>  Sales Records </h3>
+      </div>
+      <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
+        <div class="datatable-container" id='sales_table'>
+
+          <table id='sales'>
+            <thead>
+              <tr>
+                <th >Branch</th>
+                <th >Product</th>
+                <th >Quantity Sold</th>
+                <th >Actual Sales</th>
+                <th >Expected Sales</th>
+                <th >Margin</th>
+              </tr>
+            </thead>
+            
+            <tbody>
+              {% for s in sales_branch %}
+              <tr>
+                <td>{{ s.branch }} </td>
+                    <td>{{ s.product_name }}</td>
+                    <td>{{ s.quantity_sold|floatformat:1|intcomma }}</td>
+                    <td>{{ s.actual_sales|floatformat:1|intcomma }}</td>
+                    <td>{{ s.expected_sales|floatformat:1|intcomma }}</td>
+                    <td {% if s.margin != 0 %} style = "color:red;" {% endif %}> {{ s.margin|floatformat:1|intcomma }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <div class="datatable-bottom">
+           <h3> Footer </h3>
+          </div>
+
+        </div>
+      </div> 
+    </div>
+  </div>
+  <div class="row">
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        <h3> Shifts </h3>
+      </div>
+      <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
+        <div class="datatable-container" id='shift_table'>
+          <table id='shift'>
+            <thead>
+              <tr>
+                <th>Branch</th>
+                <th> Pump Attendant </th>
+                <th>Type</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Product</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            
+            <tbody>
+              {% for s in shifts %}
+              <tr>
+                <td>{{ s.inventory.branch }}</td>
+                <td>{{ s.staff }} </td>
+                <td>{{ s.type }}</td>
+                <td>{{ s.start }}</td>
+                <td>{{ s.end }}</td>
+                <th>{{ s.inventory.product }}</th>
+                <th>{{ s.inventory.quantity }}</th>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <div class="datatable-bottom">
+           <h3> Footer </h3>
+          </div>
+
+        </div>
+      </div> 
+    </div>
+  </div>
+  
+
+  <!-- <script src="{% static 'js/manager_chart.js' %}"></script> -->
+  <script src="{% static 'js/table_sort.js' %}"></script>
+
+  {% endblock %}

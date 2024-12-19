@@ -1,11 +1,11 @@
 from django.forms import ModelForm
-from .models import Shift
+from .models import Shift, Sales
 
 class EditShiftForm(ModelForm):
     class Meta:
         model = Shift
         fields = [
-            'type', 'start', 'end','branch', 'staff','pump','product','stock','is_active'
+            'type', 'start', 'end', 'staff','pump','status', 'inventory',
         ]
     
     def __init__(self, *args, **kwargs):
@@ -17,22 +17,33 @@ class EditShiftForm(ModelForm):
             self.fields['product'].widget.attrs['readonly'] = True
             self.fields['stock'].widget.attrs['readonly'] = True
 
-class PostSalesForm(ModelForm):
+class NewShiftForm(ModelForm):
+    class Meta:
+        model = Shift
+        fields = [
+            'type', 'start', 'end', 'staff','pump','status', 'inventory',
+        ]
+    
+    def __init__(self, *args, **kwargs):
+        super(NewShiftForm, self).__init__(*args, **kwargs)
+        instance = getattr(self, 'instance', None)
+        if instance and instance.pk:
+            self.fields['staff'].widget.attrs['readonly'] = True
+
+class ReconcileSalesForm(ModelForm):
         class Meta:
-            model = Shift
+            model = Sales
             fields = [
-                'type', 'start', 'end','branch', 'staff','pump','product','stock','is_active',
+                'shift', 'quantity_sold', 'expected_sales', 'actual_sales','margin','reconciliation', 'remark',
             ]
 
         def __init__(self, *args, **kwargs):
-            super(EditShiftForm, self).__init__(*args, **kwargs)
+            super(ReconcileSalesForm, self).__init__(*args, **kwargs)
             instance = getattr(self, 'instance', None)
             if instance and instance.pk:
-                self.fields['branch'].widget.attrs['readonly'] = True
-                self.fields['pump'].widget.attrs['readonly'] = True
-                self.fields['product'].widget.attrs['readonly'] = True
-                self.fields['stock'].widget.attrs['readonly'] = True
-                self.fields['type'].widget.attrs['readonly'] = True
-                self.fields['start'].widget.attrs['readonly'] = True
-                self.fields['end'].widget.attrs['readonly'] = True
-                self.fields['is_active'].widget.attrs['readonly'] = True
+                self.fields['shift'].widget.attrs['readonly'] = True
+                self.fields['quantity_sold'].widget.attrs['readonly'] = True
+                self.fields['expected_sales'].widget.attrs['readonly'] = True
+                self.fields['actual_sales'].widget.attrs['readonly'] = True
+                self.fields['margin'].widget.attrs['readonly'] = True
+

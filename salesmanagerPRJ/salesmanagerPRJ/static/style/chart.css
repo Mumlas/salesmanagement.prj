@@ -1,0 +1,51 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.full-width {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.card {
+    border: none;
+}
+
+.card-title, .card-text {
+    text-align: center;
+}
+
+.card-text {
+    font-size: 10px;
+    color: gray;
+}
+
+.table-smaller-font {
+    font-size: 12px;
+}
+
+.sidebar {
+    font-size: 14px;
+    color: gray;
+}
+
+.form-control {
+    font-size: 14px;
+    color: gray;
+}
+
+.table.table-smaller-font tbody tr {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.table.table-smaller-font tbody td {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+}
+
+.custome-background {
+    background-color: #e9f0ea;
+}

@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base_dashboard.html" %} 
 
 {% load static %}
 
@@ -11,7 +11,7 @@
     <div class="col-md-4"></div>
 
     <div class="col-md-4">
-            <div class="card mt-5">
+            <div class="card mt-2">
 
                 <div class="card-body">
 
@@ -19,18 +19,16 @@
                         <h4>Update Inventory</h4>
                     </div> 
 
-                    <form name="inventoryForm" id="inventoryForm" method="post" action="{% url 'update' %}" >
+                    <form name="inventoryForm" id="inventoryForm" method="post" action="{% url 'update-inventory' %}" >
                         
                         {% csrf_token %}
                         
-                        {% include "partial/_messages.html" %} 
-
                         <div class="form-group">
                             <label for = "branch">Select Branch</label>
                             <select class = "form-control form-control-md" name="branch" id="branchIDField">
                                 <option value="" disabled selected> Select Branch</option>
-                                {% for branch in branches %}
-                                    <option name = "branch" value="{{ branch.id }}">{{ branch.id }} - {{ branch.branchName}}</option>
+                                {% for b in branch %}
+                                    <option name = "branch" value="{{ b.id }}">{{ b.id }} - {{ b.branchName}}</option>
                                 {% endfor %}
                             </select><br>
                         </div>
@@ -74,16 +72,6 @@
                             id="quantityField"
                             class="form-control form-control-md"
                             placeholder="Enter quanityt of product supplied"
-                            /><br>
-                        </div>
-
-                        <div class="form-group">
-                            <label for = "dateSupplied">Date Supplied</label>
-                            <input
-                            type="date"
-                            name="dateSupplied"
-                            id="dateSupplied"
-                            class="form-control form-control-md"
                             /><br>
                         </div>
 

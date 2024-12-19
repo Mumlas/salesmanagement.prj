@@ -1,101 +1,400 @@
-{% extends "base.html" %} 
-
-{% load static %}
-
+{% extends "base_dashboard.html" %} {% load static %} {% load humanize %} 
 {% block title %} {{user.staff }} - Dashboard {% endblock %}
-
 {% block content %}
 
-<div class="container">
-
-        <div class="card-body">
-            <div class="card-title">
-                <div class="row mt-5">
-                    <div class="col-md-12">
-                        <div class="border bg-white p-3">
-                            <h4 class='alert alert-info align-center'>Key Indicators in Absolute Figure</h4>
-                            <div class="row my-5">
-                                <div class="col-md-3 bg-white">
-                                    <div class="border">
-                                        <canvas id="product">
-
-                                        </canvas>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3 bg-white">
-                                    <div class="border">
-                                        <canvas id="quantity">
-
-                                        </canvas>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3 bg-white">
-                                    <div class="border">
-                                        <canvas id="totalsale">
-
-                                        </canvas>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="border">
-                                        <canvas id="highesale">
-
-                                        </canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    <div class="border bg-white p-3">
-        <div class="row my-5">
-            <h4 class='alert alert-info'>Drilling Down to Specifics</h4>
-            <div class="col-md-4">
-                <div class="border bg-white">
-                    <h6 class = 'alert alert-primary'>Sales by Products</h6>
-                    <canvas id="myChart1" width='200' height='300'>
-    
-                    </canvas>
-                </div>
-            </div>
-    
-            <div class="col-md-4">
-                <div class="border bg-white">
-                    <h6 class = 'alert alert-primary'>Sales by Branches</h6>
-                    <canvas id="myChart2" width='200' height='300'>
-    
-                    </canvas>
-                </div>
-            </div>
-    
-    
-            <div class="col-md-4">
-                <div class="border bg-white">
-                    <h6 class = 'alert alert-primary'> Sales (Last 7 days)</h6>
-                    <canvas id="myChart3" width='200' height='300'>
-    
-                    </canvas>
-                </div>
-            </div>
-        </div>
+<div class="row">
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-primary text-white mb-4" style="height:200px; width:280px; margin-right:5%;">
+      <div class="card-body">Shifts</div>
+      <div class="card-footer d-flex align-items-center justify-content-between">
+          <h5>
+              <p>Total Shifts: {{ shift_count|intcomma }} <br />
+              Completed Shifts: {{ completed_shift|intcomma }}</p>
+              <hr >
+              <p><small>Next:</small> {% if next_shift == None %} None {% else %} <small>{{ next_shift.start }}</small> {% endif %} </p>
+          </h5>
+        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+      </div>
     </div>
+  </div>
 
-    <div class="row my-4">
-        <table>
-            <th>
-                <td>Title 1</td>
-                <td>Title 2</td>
-                <td>Title 3</td>
-                <td>Title 4</td>
-                <td>Title 5</td>
-            </th>
-        </table>
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-secondary text-white mb-4" style="height:200px; width:280px">
+      <div class="card-body">Quantity Sold (Liters)</div>
+      <div class="card-footer d-flex align-items-center justify-content-between">
+          <h5>
+            <ul>
+              {% for q in q_sold %}
+              <li>{% if q.product_name == None %} No Records {% else %} Products: {{ q.product_name }} <br />
+                Quantity: {{ q.quantity|floatformat:1|intcomma }} {% endif %} </li>
+              <hr >
+              {% endfor %}
+            </ul>
+          </h5>
+        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+      </div>
     </div>
+  </div>
+
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-success text-white mb-4" style="height:200px; width:280px">
+      <div class="card-body">Total Sales (Naira)</div>
+      <div
+        class="card-footer d-flex align-items-center justify-content-between">
+          <h5 style="text-align: justify">
+            <ul>
+              {% for v in v_sold %}
+              <li>{% if v.product_name == None %} No Records {% else %} Products:  {{ v.product_name }} <br />
+                Value: {{ v.value|floatformat:1|intcomma }} {% endif %}</li>
+              <hr >
+              {% endfor %}
+            </ul>
+          </h5>
+        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-md-6" >
+    <div class="card bg-dark text-white mb-2" style="height:200px; width:280px">
+      <div class="card-body">Highest Sales (Naira)</div>
+      <div class="card-footer d-flex align-items-center justify-content-between">
+          <h5 style="text-align">
+              {% for m in max_sales %}
+              <p> {% if max_sales == None %} No Records {% else %} Sales:  {{ m.value|floatformat:1|intcomma }} {% endif %}</p>
+            <p> Date: {{ m.date|date:'d M Y' }} <p>
+          </h5>
+          {% endfor %}
+        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+      </div>
+    </div>
+  </div>
 </div>
+<!-- End of first row -->
+
+<div class="row pt-1">
+  <div class="col-xl-6">
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="fas fa-chart-bar me-1"></i>
+        Stock by Product
+      </div>
+      <div class="card-body">
+        <canvas id="stockProductID" width="500" height="400"></canvas>
+        <script>
+        let ctx = document.getElementById("stockProductID").getContext('2d');
+        console.log('Date', dates);
+        //create the chart
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: dates,
+              datasets: [{
+                  label: 'Sales Amount',
+                  data: actual,
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  backgroundColor: 'rgba(75, 192, 192, 1)',
+                  borderwidth: 2
+              }]
+          },
+          option: {
+              responsive: true,
+              plugins: {
+                  legend: {
+                      position: 'top',
+                  },
+                  title: {
+                      display: true,
+                      text: 'Sales History'
+                  }
+              },
+              scales: {
+                  x: {
+                      title: {
+                          display: true,
+                          text: 'Date'
+                      }
+                  },
+                  y: {
+                      title: {
+                          display: true,
+                          text: 'Amount'
+                      },
+                      beginAtZero: true,
+                  }
+              }
+          }
+      });
+    </script>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-6">
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="fas fa-chart-bar me-1"></i>
+        Sales by Products
+      </div>
+      <div class="card-body">
+        
+        <canvas id="stockChart" width="500" height="400">
+          
+        </canvas>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-xl-6">
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="fas fa-chart-area me-1"></i>
+        Sales Overtime by Products
+      </div>
+      <div class="card-body">
+        <canvas id="saleHistory" width="500" height="400"></canvas>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-xl-6">
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="fas fa-chart-area me-1"></i>
+        Sales Overtime by Branches
+      </div>
+      <div class="card-body">
+        <canvas id="saleTimeBranch" width="500" height="400"></canvas>
+      </div>
+    </div>
+  </div>
+
+  
+</div>
+<!-- End of second row -->
+
+  <div class ='row'>
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="fas fa-table me-1"></i>
+          <h3>  Shift Roster</h3>
+        </div>
+        <div class="card-body"></div>
+        <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
+          <div class="datatable-top">
+            <div class="datatable-dropdown">
+              <label>
+                <select class="datatable-selector">
+                  <option value="5">5</option>
+                  <option value="10" selected="">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                  <option value="25">25</option>
+                </select>
+                entries per page
+              </label>
+            </div>
+            <div class="datatable-search">
+              <input
+              class="datatable-input"
+              placeholder="Search..."
+              type="search"
+              title="Search within table"
+              aria-controls="datatablesSimple"
+              />
+            </div>
+          </div>
+          <div class="datatable-container">
+            <table id="datatablesSimple" class="table-secondary">
+              <thead>
+                <tr>
+                  <th data-sortable="true" style="width: 9.74025974025974%">
+                    <a href="#" class="datatable-sorter">Start</a>
+                  </th>
+                  <th data-sortable="true" style="width: 10.1948051948052%">
+                    <a href="#" class="datatable-sorter">End</a>
+                  </th>
+                  <th data-sortable="true" style="width: 10.61038961038961%">
+                    <a href="#" class="datatable-sorter">Product</a>
+                  </th>
+                  <th data-sortable="true" style="width: 8.506493506493506%">
+                    <a href="#" class="datatable-sorter">Tank</a>
+                  </th>
+                  <th data-sortable="true" style="width: 14.415584415584416%">
+                    <a href="#" class="datatable-sorter">Stock (liters) </a>
+                  </th>
+                  <th data-sortable="true" style="width: 8.506493506493506%">
+                    <a href="#" class="datatable-sorter">Status</a>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for s in shifts %}
+                <tr data-index="0">
+                  <td> {{ s.start|date:'d M Y' }} </td>
+                  <td> {{ s.end|date:'d M Y' }} </td>
+                  <td> {{ s.inventory.product.productName }} </td>
+                  <td> {{ s.inventory.storage.storageDesc }} </td>
+                  <td> {{ s.inventory.quantity|floatformat:1|intcomma }} </td>
+                  <td> {{ s.status }} </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="datatable-bottom">
+            <div class="datatable-info">Showing 1 to {% if shift_count > 10 %} 10 {% else %} {{ shift_count }} of {{ shift_count }} entries entries {% endif %}</div>
+            <nav class="datatable-pagination">
+              <ul class="datatable-pagination-list">
+                <li
+                  class="datatable-pagination-list-item datatable-hidden datatable-disabled"
+                  >
+                  <a data-page="1" class="datatable-pagination-list-item-link">‹</a>
+                </li>
+                <li class="datatable-pagination-list-item datatable-active">
+                  <a data-page="1" class="datatable-pagination-list-item-link">1</a>
+                </li>
+                <li class="datatable-pagination-list-item">
+                  <a data-page="2" class="datatable-pagination-list-item-link">2</a>
+                </li>
+                <li class="datatable-pagination-list-item">
+                  <a data-page="3" class="datatable-pagination-list-item-link">3</a>
+                </li>
+                <li class="datatable-pagination-list-item">
+                  <a data-page="4" class="datatable-pagination-list-item-link">4</a>
+                </li>
+                <li class="datatable-pagination-list-item">
+                  <a data-page="5" class="datatable-pagination-list-item-link">5</a>
+                </li>
+                <li class="datatable-pagination-list-item">
+                  <a data-page="6" class="datatable-pagination-list-item-link">6</a>
+                </li>
+                <li class="datatable-pagination-list-item">
+                  <a data-page="2" class="datatable-pagination-list-item-link">›</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        
+
+        
+      </div>
+    
+    <div class="row">
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="fas fa-table me-1"></i>
+          <h3>  Sales Records </h3>
+        </div>
+        <div class="card-body"></div>
+        <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
+          <div class="datatable-top">
+            <div class="datatable-dropdown">
+              <label>
+                <select class="datatable-selector">
+                  <option value="5">5</option>
+                <option value="10" selected="">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+              </select>
+              entries per page
+            </label>
+          </div>
+          <div class="datatable-search">
+            <input
+            class="datatable-input"
+            placeholder="Search..."
+            type="search"
+            title="Search within table"
+            aria-controls="datatablesSimple"
+            />
+          </div>
+        </div>
+        <div class="datatable-container">
+          <table id="datatablesSimple" class="table-primary">
+            <thead>
+              <tr>
+                <th data-sortable="true" style="width: 9.74025974025974%">
+                  <a href="#" class="datatable-sorter">Sales Date</a>
+                </th>
+                <th data-sortable="true" style="width: 19.74025974025974%">
+                  <a href="#" class="datatable-sorter">Sales Agent (Pump Attendant)</a>
+                </th>
+                <th data-sortable="true" style="width: 30.1948051948052%">
+                  <a href="#" class="datatable-sorter">Tank</a>
+                </th>
+                <th data-sortable="true" style="width: 14.61038961038961%">
+                  <a href="#" class="datatable-sorter">Product</a>
+                </th>
+                <th data-sortable="true" style="width: 8.506493506493506%">
+                  <a href="#" class="datatable-sorter">Quantity (liters)</a>
+                </th>
+                <th data-sortable="true" style="width: 14.415584415584416%">
+                  <a href="#" class="datatable-sorter">Sales (Actual)</a>
+                </th>
+                <th data-sortable="true" style="width: 14.415584415584416%">
+                  <a href="#" class="datatable-sorter">Margin</a>
+                </th>
+                <th data-sortable="true" style="width: 14.415584415584416%">
+                  <a href="#" class="datatable-sorter">Reconciliation</a>
+                </th>
+
+              </tr>
+            </thead>
+            <tbody>
+              {% for s in sales %}
+              <tr data-index="0">
+                <td> {{ s.shift.end|date:'d M Y' }}
+                  <td> {{ s.shift.staff }} </td>
+                  <td> {{ s.shift.inventory.storage.storageDesc }} </td>
+                  <td> {{ s.shift.inventory.product.productName }} </td>
+                  <td> {{ s.quantity_sold|floatformat:1|intcomma }} </td>
+                  <td> {{ s.actual_sales|floatformat:1|intcomma }} </td>
+                  <td> {{ s.margin|floatformat:1|intcomma }} </td>
+                  <td> {{ s.reconciliation }}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="datatable-bottom">
+          <div class="datatable-info">Showing 1 to {% if sales_count > 10 %} 10 {% else %} {{ sales_count }} of {{ sales_count }} entries {% endif %}</div>
+          <nav class="datatable-pagination">
+            <ul class="datatable-pagination-list">
+              <li
+                class="datatable-pagination-list-item datatable-hidden datatable-disabled"
+                >
+                <a data-page="1" class="datatable-pagination-list-item-link">‹</a>
+              </li>
+              <li class="datatable-pagination-list-item datatable-active">
+                <a data-page="1" class="datatable-pagination-list-item-link">1</a>
+              </li>
+              <li class="datatable-pagination-list-item">
+                <a data-page="2" class="datatable-pagination-list-item-link">2</a>
+              </li>
+              <li class="datatable-pagination-list-item">
+                <a data-page="3" class="datatable-pagination-list-item-link">3</a>
+              </li>
+              <li class="datatable-pagination-list-item">
+                <a data-page="4" class="datatable-pagination-list-item-link">4</a>
+              </li>
+              <li class="datatable-pagination-list-item">
+                <a data-page="5" class="datatable-pagination-list-item-link">5</a>
+              </li>
+              <li class="datatable-pagination-list-item">
+                <a data-page="6" class="datatable-pagination-list-item-link">6</a>
+              </li>
+              <li class="datatable-pagination-list-item">
+                <a data-page="2" class="datatable-pagination-list-item-link">›</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>      
+    </div>
+  </div>
+
+<script src="{% static 'js/manager_chart.js' %}"></script>
 {% endblock %}

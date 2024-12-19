@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base_dashboard.html" %} 
 
 {% load static %}
 
@@ -14,14 +14,12 @@
 
                     <div class="card-body">
 
-                        <form action="{% url 'shift' %}" method="POST" name = "shift" id="shift"> 
+                        <form action="{% url 'shift' %}" method="POST" name = "shift" id="shiftForm"> 
                             <div class="card-title">
                                 <h2>Shift</h2>
                             </div> 
                             {% csrf_token %}
                             
-                            {% include "partial/_messages.html" %} 
-
                             <div class="form-group">
                                 <label for ='type'>Type</label>
                                 <select class = "form-control form-control-md" name="type" id="type">
@@ -30,9 +28,6 @@
                                     <option name = "" value="Afternoon">Afternoon</option>
                                     <option name = "" value="Evening">Evening</option>
                                 </select>
-                                <i class="fa-solid fa-circle-check"></i>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <p>error message<p>
                             </div>
                         
                             <div class="form-group">
@@ -44,9 +39,6 @@
                                 class="form-control form-control-md"
                                 value="{{ start|date:'Y-m-d H:M' }}"
                                 />
-                                <i class="fa-solid fa-circle-check"></i>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <p>error message<p>
                             </div>
 
                             <div class="form-group">
@@ -58,61 +50,52 @@
                                 class="form-control form-control-md"
                                 value="{{ start|date:'Y-m-d H:M' }}"
                                 />
-                                <i class="fa-solid fa-circle-check"></i>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <p>error message<p>
                             </div>
 
                             <div class="form-group">
-                                <label for ='branchIDField'>Select Branch</label>
-                                <select class = "form-control form-control-md" name="branch" id="branchIDField">
-                                    <option value="" disabled selected> Select Branch</option>
-                                    {% for branch in branches %}
-                                        <option name = "branch" value="{{ branch.id }}"> {{ branch.branchName}}</option>
+                                <label for ='inventoryIDField'>Select Inventory</label>
+                                <select class = "form-control form-control-md" name="inventory" id="inventoryIDField">
+                                    <option value="" disabled selected> ------- </option>
+                                    {% for i in inventory %}
+                                        <option name = "inventory" value="{{ i.id }}"> {{ i }}</option>
                                     {% endfor %}
                                 </select>
-                                <i class="fa-solid fa-circle-check"></i>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <p>error message<p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for ='branch'>Branch</label>
+                                <select name="branch" id="branchid" class="form-control form-control-md">
+                                    <option name ='branch' value = "" disabled selected> ------ </option>
+                                </select>
                             </div>
 
                             <div class="form-group">
                                 <label for ='staff'>Staff</label>
-                                <select class = "form-control form-control-md" name="staff" id="staff">
-                                    <option value = "" disabled selected>Select Staff</option>
-
+                                <select class = "form-control form-control-md" name="staff" id="staff" multiple>
+                                    {% if staff.designation == 'pump_attendant' %}
+                                    <option value = "" disabled selected>------</option>
+                                    {% endif %}
                                 </select>
-                                <i class="fa-solid fa-circle-check"></i>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <p>error message<p>
                             </div>
 
                             <div class="form-group">
-                                <label for ='facility'>Storage Tank</label>
-                                <select class = "form-control form-control-md" name="facility" id="facility">
-                                    <option value = "" disabled selected>Select Storage</option>
-                                    {% for facility in facilities%}
-                                    <option name = "facility" value=="{{ facility.id}}">{{ facility.storageDesc }}</option>
-                                    {% endfor %}
-                                </select>
-                                <i class="fa-solid fa-circle-check"></i>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <p>error message<p>
+                                <label for ='staffArea'>Selected Staff</label>
+                                <textarea
+                                name="staffArea"
+                                rows="3"
+                                id="staffArea"
+                                class="form-control form-control-md"
+                                readonly
+                            ></textarea>
                             </div>
 
                             <div class="form-group">
-                                <label for ='pump'>Pump</label>
-                                <select class = "form-control form-control-md" name="pump" id="pump">
-                                    <option value = "" disabled selected>Select Pump</option>
-                                    {% for pump in pumps %}
-                                    <option name = "pump" value=="{{ pump.id}}">{{ pump.pupmDesc }}</option>
-                                    {% endfor %}
+                                <label for ='facility'>Facility</label>
+                                <select name="facility" id="facilityid" class="form-control form-control-md">
+                                    <option name ='facility' value = "" disabled selected> ------ </option>
                                 </select>
-                                <i class="fa-solid fa-circle-check"></i>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <p>error message<p>
                             </div>
-
+                            
                             <div class="form-group">
                                 <label for ='product'>Product</label>
                                 <input
@@ -122,10 +105,7 @@
                                 class="form-control form-control-md"
                                 readonly
                                 />
-                                <i class="fa-solid fa-circle-check"></i>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <p>error message<p>
-                            </div>                    
+                            </div>
 
                             <div class="form-group">
                                 <label for ='stock'>Quantity in Stock</label>
@@ -136,20 +116,33 @@
                                 class="form-control form-control-md"
                                 readonly
                                 />
-                                <i class="fa-solid fa-circle-check"></i>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <p>error message<p>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for ='pump'>Pump</label>
+                                <select class = "form-control form-control-md" name="pump" id="pump" multiple>
+                                    <option value = "" disabled selected>Select Pump</option>
+                                    {% for pump in pumps %}
+                                    <option name = "pump" value="{{ pump.id}}">{{ pump.pupmDesc }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
 
                             <div class="form-group">
-                                <label for ='active'>Activate</label>
-                                <input
-                                    type = "checkbox"
-                                    name="active" 
-                                    id="active"
-                                    disabled="disabled"
-                                />
+                                <label for ='pumpArea'>Selected Pump(s)</label>
+                                <textarea
+                                name="pumpArea"
+                                rows="3"
+                                id="pumpArea"
+                                class="form-control form-control-md"
+                                readonly
+                            ></textarea>
                             </div>
+
+                            <div class="form-group">
+                                <input type="checkbox" id="bulkshift" name="bulkshift" value="createBulkShift" />
+                                <label for="bulkshift">Bulk Shift</label><br>
+                            </div> <br />
 
                             <input type='submit' value="Create Shift" class="btn btn-block btn-primary btn-primary-lg py-3 submit-btn" />
                         </form> <!-- close form-->
@@ -162,8 +155,11 @@
 
         </div>
 
-        <script src = "{% static 'js/shift.js' %}">
+        <script src = "{% static 'js/shifts.js' %}">
         </script>
-
+        <!--
+        <<script src = "{% static 'js/bulk_shift.js' %}">
+        </script>
+        -->
     {% endblock %}
 </body>

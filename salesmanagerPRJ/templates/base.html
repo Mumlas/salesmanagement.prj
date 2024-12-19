@@ -17,7 +17,7 @@
     <!-- Custom styles for this template -->
     <link href="{% static 'css/dashboard.css' %}" rel="stylesheet" />
   </head>
-  <body>
+  <body class="bg-cream">
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Almanas Oil & Gas</a>
       {% if user.is_authenticated %}
@@ -41,7 +41,7 @@
 
     <div class="container-fluid">
       <div class="row">
-        {% include 'partial/_sidenavbar.html' %}
+        {% include 'partial/layout-sidenav.html' %}
     
     {% else %}
         <ul class="navbar-nav px-3">

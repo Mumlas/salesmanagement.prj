@@ -215,7 +215,7 @@ def login_user(request):
         if user is not None:
             login(request,user)
             messages.success(request,'You are logged in')
-            return redirect('main-dashboard')
+            return redirect('dashboard-main')
         else:
             messages.warning(request,'User does not exist contact your supervisor')
             return render(request,"authentication/login.html")

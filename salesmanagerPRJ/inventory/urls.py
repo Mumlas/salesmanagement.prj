@@ -6,6 +6,6 @@ urlpatterns = [
     path('get-products/<int:facility_id>/<int:branch_id>/', views.get_products, name='get_products'),
     path('get-quantity/<int:product_id>/', views.get_quantity, name='get_quantity'),
     path('', views.get_branches, name = 'get_branches'),
-    path('update/', views.update_inventory, name='update')
+    path('update-inventory/', views.update_inventory, name='update-inventory')
     #path('', views.getInventory, name='get_inventory')
 ]

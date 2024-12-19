@@ -1,8 +1,8 @@
-{% extends "base.html" %} 
+{% extends "base_dashboard.html" %} 
 
 {% load static %}
 
-<title>{% block title %} Shift Roster  {% endblock%} </title>
+<title>{% block title %}  {{ user.staff }} - Shift Roster  {% endblock%} </title>
 
 <body>
     {% block content%}
@@ -12,11 +12,11 @@
 
                     <div class="card-body">
                         <div class="card-title">
-                            <h2 class="h2">Shift Management</h2>
+                            <h2 class="h2">Shift History</h2>
                         </div> 
                     </div>
 <hr>
-                        <table class = "table-danger">
+                        <table class = "datatable-table">
                             <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>
                             <thead>
                                 <tr>
@@ -45,18 +45,19 @@
                                         <td> {{ shift.type }} </td>
                                         <td> {{ shift.start }} </td>
                                         <td> {{ shift.end }} </td>
-                                        <td> {{ shift.branch }} </td>
+                                        <td> {{ shift.inventory.branch }} </td>
                                         <td> {{ shift.pump }} </td>
-                                        <td> {{ shift.product }} </td>
-                                        <td> {{ shift.stock }} </td>
-                                        {% if shift.is_active%}
+                                        <td> {{ shift.inventory.product }} </td>
+                                        <td> {{ shift.inventory.quantity }} </td>
+                                        {% if shift.status == 'On-Going' %}
                                             <td> On going </td>
-                                            <td> <a class='btn btn-outline-success btn-sm' href = "{% url 'post-sales' shift.id %}">Post Sales</a>
-                                        {% elif shift.is_active=False %}
+                                            <td> <a class='btn btn-primary btn-sm' href = "{% url 'post-sales' shift.id %}">Post Sales</a>
+                                        {% elif shift.status == 'Pending' %}
                                             <td> Pending </td>
-                                            <td> <a class='btn btn-outline-success btn-sm' href = "{% url 'start-shift' shift.id %}">Start SHift</a>
+                                            <td> <a class='btn btn-success btn-sm' href = "{% url 'start-shift' shift.id %}">Start Shift</a>
                                         {% else %}
                                             <td> Ended </td>
+                                            <td> None </td>
                                         {% endif %}
                                  {% endfor %} 
                             </tbody>

@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>{% block title %} Dashboard - {{ user.staff}} {% endblock %}</title>
+    <link href="{% static 'style/dashboard-styles.css' %}" rel="stylesheet" />
+    <link href="{% static 'style/bootstrap.css' %}" rel="stylesheet" />
+    <link href="{% static 'style/tiles.css' %}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src = "{% static 'js/all.js' %}"></script>
+    <link rel="shortcut icon" href="#" />
+
+    <style>
+            tbody tr:nth-child(even) td {
+                background-color: lightgrey; 
+                color: #000;
+            }
+
+            tbody tr:nth-child(odd) td {
+                background-color: white; 
+                color: #000;
+            }
+
+            tbody tr:hover td {
+                background-color: red;
+                color: yellow;
+            }
+
+            table {
+                border:1px solid black; 
+                border-collapse:collapse; 
+                padding:4px; width:100%;
+                background-color: #000;
+            }
+  
+            th {
+                font-size: 10pt; 
+                font-style: bold; 
+                border: 1px solid lightgrey; 
+                padding: 4px; 
+                text-align: center;
+            }
+  
+            td {
+                font-size: 9pt; 
+                border: 1px solid lightgrey; 
+                padding: 4px; 
+                text-align: center;
+            }
+
+
+        </style>
+  </head>
+
+    <body class="sb-nav-fixed p-2" style = "background:rgba(220,222,189,0.2);">
+        <div id="viewer"></div>
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <!-- Sidebar Toggle
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            -->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+                <svg class="svg-inline--fa fa-bars" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                    <path fill="currentColor" d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"></path>
+                </svg><i class="fas fa-bars"></i>
+            </button>
+            <a class="navbar-brand ps-3" href="#">Almanas Oil & Gas</a>
+
+            <!-- Navbar Search-->
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">Profiles</a></li>
+                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="{% url 'logout_user' %}">({{ user.staff }}) Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <div id="layoutSidenav">
+                <div id="layoutSidenav_nav">
+                {% include 'partial/layout-sidenav.html' %}
+                </div>      
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                               {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="container-fluid px-4">
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active"><h3>Almanas Oil & Gas</h3> {{ user.staff.branch }}, {{ user.staff.branch.branchAddress }}</li>
+                        </ol>
+                        {% block content %} {% endblock %}
+                    </div>
+                </main>
+                    <!-- Footer Section -->
+                <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                        <div class="text-muted">Copyright &copy; www.almanasenergy.com</div>
+                        <div>
+                            <p>Follow us on:</p>
+                            <a href="https://facebook.com">Facebook</a> |
+                            <a href="https://twitter.com">Twitter</a> |
+                            <a href="https://instagram.com">Instagram</a>
+                        </div>
+                    </div>
+                </div>
+                </footer>
+            </div>
+        </div>
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}" ></script>
+        <script src="{% static 'js/scripts.js' %}"></script>
+        <script src="{% static 'js/chart.min.js' %}" ></script>
+        <!--        <script src="{% static 'js/chart-area-demo.js' %} "></script>
+        <script src="{% static 'js/chart-bar-demo.js' %}"></script>-->
+        <script src="{% static 'js/simple-datatables.min.js' %}" ></script>
+        <script src="{% static 'js/datatables-simple-demo.js' %}"></script>
+        <script src="{% static 'js/chart.umd.js' %}"></script>
+    </body>
+</html>

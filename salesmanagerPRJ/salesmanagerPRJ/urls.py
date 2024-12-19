@@ -22,7 +22,7 @@ admin.site.site_header = "Inventory & Transaction Management"
 admin.site.index_title = "Al-Manas Admin Panel"
 
 urlpatterns = [
-    path('', include('sales.urls')), # rout to sales urls
+    path('', include('validation.urls')), # rout to sales urls
     path('validation/', include('validation.urls')),
     path('admin/', admin.site.urls),
     path('setup/', include('setup.urls')),
@@ -30,4 +30,5 @@ urlpatterns = [
     path('sales/',include('sales.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('report/', include('report.urls')),
 ]

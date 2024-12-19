@@ -4,7 +4,62 @@
 
 {% block title %} Login Page {%  endblock %}
 
+
 {% block login %}
+
+<div class="container">
+    <div class="row mt-5">
+
+    </div>
+    <div class="row mt-5">
+
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+            <div class="border bg-dark p-3 ">
+                <h3>Login Page</h3>
+                <hr />
+                <form action="{% url 'login_user' %}" method="POST">            
+                    {% csrf_token %}
+                    
+                    {% include "partial/_messages.html" %}
+    
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input
+                            type="text"
+                            name="username"
+                            id="usernameField"
+                            class="form-control form-control-md"
+                            placeholder="Username"
+                        />
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            id="passwordField"
+                            class="form-control form-control-md"
+                            placeholder="Password"
+                        />
+                        <small class="float-left py-3 showPasswordToggle">SHOW</small>
+                    </div>
+
+                    <div class="form-group">
+                        <input type='submit' value="Log in" class="btn btn-success py-3 mt-2" />
+                    </div>    
+                </form> 
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+<!--
+<div class="row mt-3"></div>
         <div class="row">
 
             <div class="col-md-2">
@@ -59,4 +114,4 @@
 
             </div>
         </div>
-{% endblock %}
+-->
