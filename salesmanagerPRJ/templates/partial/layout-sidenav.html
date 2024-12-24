@@ -11,7 +11,7 @@
             </a>
             <div class="sb-sidenav-menu-heading">Activity</div>
 
-{% if user.is_authenticated and user.role == 'manager' %}
+{% if user.is_authenticated and user.role == 'md_ceo' %}
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                 Operations
@@ -26,18 +26,21 @@
                 </nav>
             </div>
             {% endif %}
+            {% if user.is_authenticated and user.role != 'md_ceo' %}
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                 Transaction
                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
             </a>
             <div class="collapse" id="collapsePages" arial-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                {% if user.is_authenticated and user.role == 'manager' %}               
                 <a class="nav-link" href="{% url 'update-inventory' %}">  
                     <div class="sb-nav-link-icon">
                         <i class="fas fa-tachometer-alt"></i>
                     </div>
                     Update Inventory
                 </a>
+                {% endif %}
                 <a class="nav-link collapse" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth" href="{% url 'dashboard-shift' %}">
                     <div class="sb-nav-link-icon">
                         <i class="fa-regular fa-clock"></i>
@@ -67,7 +70,7 @@
                         </a>
                     </nav>
                 </div>
-
+                
                 <a class="nav-link" href="{% url 'dashboard-sale' %}">  
                     <div class="sb-nav-link-icon">
                         <i class="fa-sharp-duotone fa-solid fa-naira-sign"></i>
@@ -75,30 +78,11 @@
                     Sales
                 </a>
             </div>
+            {% endif %}
             <div class="sb-sidenav-menu-heading">Reports</div>
-            <a class="nav-link" href="{ url 'daily' staff_id }">
+            <a class="nav-link" href="{% url 'report' %}">
                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                Daily
-            </a>
-            <a class="nav-link" href="{ url 'weekly' staff_id }">
-                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                Weekly
-            </a>
-            <a class="nav-link" href="{ url 'monthly' staff_id }">
-                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                Monthly
-            </a>
-            <a class="nav-link" href="{ url 'quarterly' staff_id }">
-                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                Quarterly
-            </a>
-            <a class="nav-link" href="{ url 'yearly' staff_id }">
-                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                Yearly
-            </a>
-            <a class="nav-link" href="{ url 'custom' staff_id }">
-                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                Custom
+                Generate Report
             </a>
         </div>
     </div>

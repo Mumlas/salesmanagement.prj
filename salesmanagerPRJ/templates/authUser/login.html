@@ -21,10 +21,9 @@
                 <form action="{% url 'register_cls' %}" method="post"> 
                     
                     {% csrf_token %}
-                    
-                    {% include "partial/_messages.html" %}               
-                    
+                                        
                     <div class="form-group">
+                        <label for="username" class="form-control form-control-md">Username:</label>
                         <input
                         type="text"
                         name="username"
@@ -33,12 +32,9 @@
                         placeholder="Username"
                         />
                     </div>
-                    <div class="invalid_feedback invalid-feedback" styele="display:none">
-
-                    </div>
-                    <p class="text-sm text-success usernameSuccessOutput"> </p>
-
+      
                     <div class="form-group">
+                        <label for="password">Password</label>
                         <input
                         type="password"
                         name="password"

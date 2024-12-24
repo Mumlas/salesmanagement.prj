@@ -21,11 +21,9 @@
                 <hr />
                 <form action="{% url 'login_user' %}" method="POST">            
                     {% csrf_token %}
-                    
-                    {% include "partial/_messages.html" %}
-    
+                        
                     <div class="form-group">
-                        <label for="username">Username</label>
+                        <label for="username" >Username</label>
                         <input
                             type="text"
                             name="username"

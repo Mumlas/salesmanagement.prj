@@ -12,4 +12,5 @@ urlpatterns = [
     path('sale/', views.product_view, name='sale'),
     path('', views.main_view, name = 'dashboard-main'),
     path('md_chart/', views.md_chart, name='md_chart'),
+    path('report/', views.generate_report, name='report'),
 ]

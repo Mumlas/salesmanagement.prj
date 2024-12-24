@@ -5,8 +5,8 @@ from setup.models import Staff, Branch, Storage, Price, Product
 from sales.models import Sales, Shift
 from inventory.models import Inventory
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum, F, Max
-from django.db.models.functions import TruncDate
+from django.db.models import Sum, F, Max, FloatField
+from django.db.models.functions import TruncDate, Coalesce
 import pandas as pd
 from django.contrib import messages
 from annoying.functions import get_object_or_None
@@ -14,10 +14,6 @@ from dashboard.chart import plot_barchart, md_chart
 import plotly.graph_objects as go
 import plotly.express as px
 
-
-
-def count_object(model, *args, **kwargs):
-    pass
 
 @login_required
 def md_chart(request):
@@ -56,13 +52,26 @@ def md_chart(request):
             sales = sales.filter(shift__inventory__product_id=product_id) #.select_related().values(product_name = F('shift__inventory__product__productName')).annotate(quantity_sold =Sum('quantity_sold'),actual_sales = Sum('actual_sales'), expected_sales=Sum('expected_sales'))
             stocks = stocks.filter(product_id=product_id) #.select_related('product').values(product_name = F('product__productName')).annotate(quantity = Sum('quantity')).order_by('quantity')
     
-        aggregate_sales = sales.select_related().values(product_name = F('shift__inventory__product__productName')).annotate(quantity_sold =Sum('quantity_sold'),actual_sales = Sum('actual_sales'), expected_sales=Sum('expected_sales'), margin=Sum('margin'))
+        aggregate_sales = sales.select_related().values(product_name = F('shift__inventory__product__productName')).annotate(quantity_sold =Sum('quantity_sold'),
+                                                                                                                             actual_sales = Sum('actual_sales'), 
+                                                                                                                             expected_sales=Sum('expected_sales'), 
+                                                                                                                             margin=Sum('margin'))
         aggregate_stock = stocks.select_related().values(product_name = F('product__productName')).annotate(quantity = Sum('quantity')).order_by('quantity')
-        aggregate_sales_date = sales.select_related().values(product_name = F('shift__inventory__product__productName'), dates=TruncDate('shift__end')).annotate(quantity_sold =Sum('quantity_sold'),actual_sales = Sum('actual_sales'), expected_sales=Sum('expected_sales'))    
+        aggregate_sales_date = sales.select_related().values(product_name = F('shift__inventory__product__productName'), dates=TruncDate('shift__end')).annotate(quantity_sold =Sum('quantity_sold'),
+                                                                                                                                                                 actual_sales = Sum('actual_sales'), 
+                                                                                                                                                                 expected_sales=Sum('expected_sales'))
         aggregate_stock_date = stocks.select_related().values(product_name = F('product__productName'), dates=TruncDate('dateUpdated')).annotate(quantity =Sum('quantity'))  
-        sales_branch = sales.select_related().values(branch = F('shift__inventory__branch__branchName'), product_name = F('shift__inventory__product__productName')).annotate(quantity_sold =Sum('quantity_sold'), actual_sales = Sum('actual_sales'), expected_sales=Sum('expected_sales'), margin=Sum('margin'))
-        branch_performance = sales.select_related().values(branch = F('shift__inventory__branch__branchName')).annotate(quantity_sold =Sum('quantity_sold'), actual_sales = Sum('actual_sales'), expected_sales=Sum('expected_sales'), margin=Sum('margin'))
+        
+        sales_branch = sales.select_related().values(branch = F('shift__inventory__branch__branchName'), product_name = F('shift__inventory__product__productName')).annotate(quantity_sold =Sum('quantity_sold'), 
+                                                                                                                                                                              actual_sales = Sum('actual_sales'), 
+                                                                                                                                                                              expected_sales=Sum('expected_sales'), 
+                                                                                                                                                                              margin=Sum('margin'))
+        branch_performance = sales.select_related().values(branch = F('shift__inventory__branch__branchName')).annotate(quantity_sold =Sum('quantity_sold'), 
+                                                                                                                        actual_sales = Sum('actual_sales'), 
+                                                                                                                        expected_sales=Sum('expected_sales'), 
+                                                                                                                        margin=Sum('margin'))
 
+        print(f'Stock Data {aggregate_stock_date}')
         sales_date = [item['dates'] for item in aggregate_sales_date]
         stock_date = [item['dates'] for item in aggregate_stock_date]
 
@@ -75,12 +84,39 @@ def md_chart(request):
         sale_branch = [item['actual_sales'] for item in branch_performance]
         branch = [item['branch'] for item in branch_performance]
 
-        sales_df = pd.DataFrame.from_records(aggregate_sales_date)
+        product_list = [item['productName'] for item in Product.objects.all().values()]
+
+        if not aggregate_sales:
+            aggregate_sales = []
+            for i in range(len(product_list)):
+                tmp = {'product_name':product_list[i], 'quantity_sold':0.0, 'actua_sales':0.0,'expected_sales':0.0, 'margin':0.0}
+                aggregate_sales.append(tmp)
+  
+
+        print(f' Aggregate sales {aggregate_sales}')
+
+        if not aggregate_sales_date:
+            sales_df = pd.DataFrame({'dates': [start_date,] * len(product_list),
+                                    "product_name": product_list,
+                                    "quantity_sold": [0.0,] * len(product_list),
+                                    "actual_sales": [0.0,] * len(product_list),
+                                    "expected_sales": [0.0,] * len(product_list)}
+                                    )
+        else:
+            sales_df = pd.DataFrame.from_records(aggregate_sales_date)
         print(sales_df)
-        sales_history = go.Figure(
+        sale_history = go.Figure(
             data = [go.Scatter(x=sales_date, y= sales_actual)],
             layout = go.Layout(title='Sales History', xaxis=dict(title='Date'), yaxis=dict(title='Actual Sales'))
         )
+
+        sales_history = go.Figure(
+            data = [go.Bar(x=sales_date, y= sales_actual)],
+            layout = go.Layout(title='Sales History', xaxis=dict(title='Date'), yaxis=dict(title='Actual Sales'))
+        )
+
+        sales_history = px.bar(sales_df, x='dates', y = sales_df['actual_sales'], color=sales_df['product_name'])
+        sales_history.update_layout(barmode='group')
 
         stock_chart = go.Figure(
             data=[go.Bar(x=stock_product, y=stock_qtty)],
@@ -258,9 +294,28 @@ def md_view(request):
         layout = go.Layout(title='Sales History', xaxis=dict(title='Date'), yaxis=dict(title='Actual Sales'))
     )
 
-    sale_history.add_trace(go.Scatter(x=sales_date, y=sales_expected))
+    sale_history = go.Figure(
+        data = [go.Bar(x=sales_df['dates'], y= sales_df['actual_sales'])],
+        layout = go.Layout(title='Sales History', xaxis=dict(title='Dates'), yaxis=dict(title='Sales')))
+    
+    sale_history = go.Figure()
 
-    sales_history = px.line(sales_df, x='dates', y= 'actual_sales', color='product_name', 
+    for product in sales_df['product_name'].values:
+        print(product)
+        sale_history.add_trace(go.Bar(
+            x=sales_df.columns[1:],
+            y=list(sales_df.loc[sales_df['product_name']==product][list(sales_df.columns[4:5])].transpose().iloc[:,0]),
+            name = str(product),
+        ))
+        print(list(sales_df.loc[sales_df['product_name']==product][list(sales_df.columns[4:5])].transpose().iloc[:,0]))
+
+    sale_history.update_layout(barmode='group')
+
+    sales_history = px.bar(sales_df, x='dates', y = sales_df['actual_sales'], color=sales_df['product_name'])
+    sales_history.update_layout(barmode='group', title='Sales History', xaxis=dict(title='Dates'), yaxis=dict(title='Sales'))
+
+
+    sale_history = px.line(sales_df, x='dates', y= 'actual_sales', color='product_name', 
                             color_discrete_sequence=['navy', 'darkorange','green','red','brown'], title='Sales History',
                             hover_name='actual_sales', hover_data={'product_name':True, 'margin':True},
                             labels={'actual_sales':'Sales Amount', 'date':'Date'}, template='plotly_white')
@@ -435,3 +490,50 @@ def sale_view(request):
             context = attendant_view(request)
             return render(request,'dashboard/attendant/attendant_sales.html', context)
 
+@login_required
+def generate_report(request):
+
+    role = request.user.role
+
+    print(f'Designation: {role}')
+    match role:
+        case 'supervisor':
+            context = supervisor_view(request)
+            return render(request, 'dashboard/supervisor/report.html', context)
+        case 'manager':
+            context = manager_view(request)
+            return render(request, 'dashboard/manager/report.html', context)
+        case 'cashier_accountant':
+            context = accountant_view(request)
+            return render(request, 'dashboard/accountant/report.html', context)
+        case 'md_ceo':
+            print(f'Designation: {role}')
+            context = md_view(request)
+            return render(request, 'dashboard/md/report.html', context)
+
+        case _:
+            context = attendant_view(request)
+            return render(request,'dashboard/attendant/report.html', context)
+        
+@login_required
+def filter_report(request):
+
+    role = request.user.role
+
+    match role:
+        case 'supervisor':
+            context = supervisor_view(request)
+            return render(request, 'dashboard/supervisor/report.html', context)
+        case 'manager':
+            context = manager_view(request)
+            return render(request, 'dashboard/manager/report.html', context)
+        case 'cashier_accountant':
+            context = accountant_view(request)
+            return render(request, 'dashboard/accountant/report.html', context)
+        case 'md':
+            context = md_view(request)
+            return render(request, 'dashboard/md/report.html', context)
+
+        case _:
+            context = attendant_view(request)
+            return render(request,'dashboard/attendant/report.html', context)
